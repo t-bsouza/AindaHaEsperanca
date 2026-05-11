@@ -6,118 +6,49 @@ signal diary_updated
 signal resources_changed
 signal patient_changed(patient: Patient)
 
-const MAX_DAYS := 7
-const START_HOUR := 7
-const NIGHT_HOUR := 21
-
 const TREATMENT_EFFECTIVENESS := {
 	ResourceManager.MEDICINE: 30,
 	ResourceManager.HERBS: 15,
 }
 
-var current_day: int = 1
-var current_hour: int = START_HOUR
+var diary_entries: Array[String] = []
 
-# Variáveis espelho para manter compatibilidade com scripts antigos da UI.
-# A fonte real dos dados é o ResourceManager.
+var family := {
+	"pai": {"name": "Senhor Silver", "health": 80, "state": "saudável"},
+	"filho": {"name": "Bart", "health": 45, "state": "acamado"},
+	"filha": {"name": "Lisa", "faith": 70, "trust": 40},
+	"avo": {"name": "Vovô Silver", "health": 60, "state": "frágil"}
+}
+
+var patients_by_day := {
+	1: [{"name": "Nara", "description": "Uma mulher cansada chega pedindo ervas para tratar o pai.", "symptoms": ["febre", "tosse", "fraqueza"], "severity": 35}],
+	2: [{"name": "Seu Antônio", "description": "Um homem idoso chega tremendo, com manchas escuras nos braços.", "symptoms": ["calafrios", "manchas", "delírio"], "severity": 55}],
+	3: [{"name": "Clara Mendes", "description": "Uma jovem procura ajuda depois de perder quase toda a família.", "symptoms": ["febre alta", "dor no peito", "fraqueza"], "severity": 70}],
+	4: [{"name": "Tomás", "description": "Um pescador robusto, mas com os olhos fundos de quem não dorme há dias.", "symptoms": ["insônia", "tosse seca", "dor de cabeça"], "severity": 40}],
+	5: [{"name": "Dona Perpétua", "description": "A padeira da vila. Chegou apoiada na porta, mal conseguindo ficar de pé.", "symptoms": ["fraqueza extrema", "vômito", "febre"], "severity": 65}],
+	6: [{"name": "Menino desconhecido", "description": "Uma criança sem nome, trazida por um vizinho. Ninguém sabe de onde veio.", "symptoms": ["manchas roxas", "delírio", "febre alta"], "severity": 80}],
+	7: [{"name": "Padre Alves", "description": "O último homem de fé da vila. Veio até você antes de ir embora para sempre.", "symptoms": ["tosse com sangue", "fraqueza", "dor no peito"], "severity": 75}]
+}
+
+var patient_manager: PatientManager
+var resource_manager: ResourceManager
+var time_manager: TimeManager
+
+# Variáveis espelho para manter compatibilidade com UIs/scripts existentes.
+var current_day: int = 1
+var current_hour: int = 7
 var medicine: int = 0
 var herbs: int = 0
 var hope: int = 0
 var food: int = 0
 var money: int = 0
-
 var current_patient: Patient = null
-var diary_entries: Array[String] = []
-
-var family := {
-	"pai": {
-		"name": "Senhor Silver",
-		"health": 80,
-		"state": "saudável"
-	},
-	"filho": {
-		"name": "Bart",
-		"health": 45,
-		"state": "acamado"
-	},
-	"filha": {
-		"name": "Lisa",
-		"faith": 70,
-		"trust": 40
-	},
-	"avo": {
-		"name": "Vovô Silver",
-		"health": 60,
-		"state": "frágil"
-	}
-}
-
-var patients_by_day := {
-	1: [
-		{
-			"name": "Nara",
-			"description": "Uma mulher cansada chega pedindo ervas para tratar o pai.",
-			"symptoms": ["febre", "tosse", "fraqueza"],
-			"severity": 35
-		}
-	],
-	2: [
-		{
-			"name": "Seu Antônio",
-			"description": "Um homem idoso chega tremendo, com manchas escuras nos braços.",
-			"symptoms": ["calafrios", "manchas", "delírio"],
-			"severity": 55
-		}
-	],
-	3: [
-		{
-			"name": "Clara Mendes",
-			"description": "Uma jovem procura ajuda depois de perder quase toda a família.",
-			"symptoms": ["febre alta", "dor no peito", "fraqueza"],
-			"severity": 70
-		}
-	],
-	4: [
-		{
-			"name": "Tomás",
-			"description": "Um pescador robusto, mas com os olhos fundos de quem não dorme há dias.",
-			"symptoms": ["insônia", "tosse seca", "dor de cabeça"],
-			"severity": 40
-		}
-	],
-	5: [
-		{
-			"name": "Dona Perpétua",
-			"description": "A padeira da vila. Chegou apoiada na porta, mal conseguindo ficar de pé.",
-			"symptoms": ["fraqueza extrema", "vômito", "febre"],
-			"severity": 65
-		}
-	],
-	6: [
-		{
-			"name": "Menino desconhecido",
-			"description": "Uma criança sem nome, trazida por um vizinho. Ninguém sabe de onde veio.",
-			"symptoms": ["manchas roxas", "delírio", "febre alta"],
-			"severity": 80
-		}
-	],
-	7: [
-		{
-			"name": "Padre Alves",
-			"description": "O último homem de fé da vila. Veio até você antes de ir embora para sempre.",
-			"symptoms": ["tosse com sangue", "fraqueza", "dor no peito"],
-			"severity": 75
-		}
-	]
-}
-
-var patient_manager: PatientManager
-var resource_manager: ResourceManager
 
 
 func _ready() -> void:
 	_setup_managers()
-	_sync_resource_cache()
+	_sync_time_mirror()
+	_sync_resources_mirror()
 
 
 func _setup_managers() -> void:
@@ -133,44 +64,51 @@ func _setup_managers() -> void:
 		resource_manager.name = "ResourceManager"
 		add_child(resource_manager)
 
+	time_manager = get_node_or_null("TimeManager") as TimeManager
+	if time_manager == null:
+		time_manager = TimeManager.new()
+		time_manager.name = "TimeManager"
+		add_child(time_manager)
+
 	if not patient_manager.patient_changed.is_connected(_on_patient_changed):
 		patient_manager.patient_changed.connect(_on_patient_changed)
-
 	if not patient_manager.queue_empty.is_connected(_on_queue_empty):
 		patient_manager.queue_empty.connect(_on_queue_empty)
-
 	if not resource_manager.resources_changed.is_connected(_on_resources_changed):
 		resource_manager.resources_changed.connect(_on_resources_changed)
+	if not time_manager.day_changed.is_connected(_on_day_changed):
+		time_manager.day_changed.connect(_on_day_changed)
+	if not time_manager.time_changed.is_connected(_on_time_changed):
+		time_manager.time_changed.connect(_on_time_changed)
+	if not time_manager.night_started.is_connected(_on_night_started):
+		time_manager.night_started.connect(_on_night_started)
+	if not time_manager.game_days_finished.is_connected(_on_game_days_finished):
+		time_manager.game_days_finished.connect(_on_game_days_finished)
 
 
 func start_new_game() -> void:
 	_setup_managers()
-	current_day = 1
-	current_hour = START_HOUR
-
+	time_manager.reset()
 	resource_manager.reset()
 	patient_manager.reset()
 	diary_entries.clear()
 	_reset_family()
 	_load_patients_for_current_day()
-	_sync_resource_cache()
-
-	day_changed.emit(current_day)
-	time_changed.emit(current_hour)
+	_sync_time_mirror()
+	_sync_resources_mirror()
 	resources_changed.emit()
-
 	get_tree().change_scene_to_file("res://scenes/main.tscn")
 
 
 func _reset_family() -> void:
-	family["pai"]["health"] = 80
-	family["pai"]["state"] = "saudável"
-	family["filho"]["health"] = 45
-	family["filho"]["state"] = "acamado"
-	family["filha"]["faith"] = 70
-	family["filha"]["trust"] = 40
-	family["avo"]["health"] = 60
-	family["avo"]["state"] = "frágil"
+	family.pai.health = 80
+	family.pai.state = "saudável"
+	family.filho.health = 45
+	family.filho.state = "acamado"
+	family.filha.faith = 70
+	family.filha.trust = 40
+	family.avo.health = 60
+	family.avo.state = "frágil"
 
 
 func _load_patients_for_current_day() -> void:
@@ -188,22 +126,47 @@ func _on_queue_empty() -> void:
 
 
 func _on_resources_changed(_resources: Dictionary) -> void:
-	_sync_resource_cache()
+	_sync_resources_mirror()
 	resources_changed.emit()
 
 
-func _sync_resource_cache() -> void:
+func _on_day_changed(new_day: int) -> void:
+	current_day = new_day
+	day_changed.emit(new_day)
+
+
+func _on_time_changed(new_hour: int) -> void:
+	current_hour = new_hour
+	time_changed.emit(new_hour)
+
+
+func _on_night_started(_day_finished: int) -> void:
+	end_day()
+
+
+func _on_game_days_finished() -> void:
+	end_game()
+
+
+func _sync_time_mirror() -> void:
+	if time_manager == null:
+		return
+	current_day = time_manager.current_day
+	current_hour = time_manager.current_hour
+
+
+func _sync_resources_mirror() -> void:
 	if resource_manager == null:
 		return
-	medicine = resource_manager.get_resource(ResourceManager.MEDICINE)
-	herbs = resource_manager.get_resource(ResourceManager.HERBS)
-	hope = resource_manager.get_resource(ResourceManager.HOPE)
-	food = resource_manager.get_resource(ResourceManager.FOOD)
-	money = resource_manager.get_resource(ResourceManager.MONEY)
+	medicine = resource_manager.medicine
+	herbs = resource_manager.herbs
+	hope = resource_manager.hope
+	food = resource_manager.food
+	money = resource_manager.money
 
 
 func treat_current_patient(treatment_type: String) -> void:
-	if patient_manager == null or not patient_manager.has_current_patient():
+	if not patient_manager.has_current_patient():
 		return
 
 	var patient: Patient = patient_manager.current_patient
@@ -240,12 +203,9 @@ func _resolve_and_log(patient: Patient, treatment_name: String, effectiveness: i
 		Patient.HealthState.RECOVERED:
 			resource_manager.add_resource(ResourceManager.HOPE, 5)
 			add_diary_entry("%s se recuperou após o tratamento." % patient.patient_name)
-		Patient.HealthState.STABLE:
+		Patient.HealthState.STABILIZED, Patient.HealthState.STABLE:
 			add_diary_entry("%s foi estabilizado, ao menos por enquanto." % patient.patient_name)
-		Patient.HealthState.WORSE:
-			resource_manager.add_resource(ResourceManager.HOPE, -5)
-			add_diary_entry("%s piorou apesar da tentativa de tratamento." % patient.patient_name)
-		Patient.HealthState.CRITICAL:
+		Patient.HealthState.WORSENED, Patient.HealthState.WORSE, Patient.HealthState.CRITICAL:
 			resource_manager.add_resource(ResourceManager.HOPE, -5)
 			add_diary_entry("%s piorou apesar da tentativa de tratamento." % patient.patient_name)
 		Patient.HealthState.DEAD:
@@ -254,45 +214,36 @@ func _resolve_and_log(patient: Patient, treatment_name: String, effectiveness: i
 
 
 func advance_time(hours: int) -> void:
-	current_hour += hours
-
-	if current_hour >= NIGHT_HOUR:
-		end_day()
-	else:
-		time_changed.emit(current_hour)
+	time_manager.advance_time(hours)
+	_sync_time_mirror()
 
 
 func end_day() -> void:
 	patient_manager.progress_all_patients()
-	current_day += 1
+	_apply_night_consequences()
 
-	if current_day > MAX_DAYS:
+	if resource_manager.get_resource(ResourceManager.HOPE) <= 0:
 		end_game()
 		return
 
-	current_hour = START_HOUR
-	_apply_night_consequences()
+	if not time_manager.start_next_day():
+		return
+
+	_sync_time_mirror()
 	_load_patients_for_current_day()
-
-	day_changed.emit(current_day)
-	time_changed.emit(current_hour)
-
 	get_tree().change_scene_to_file("res://scenes/diary.tscn")
 
 
 func _apply_night_consequences() -> void:
 	if not resource_manager.consume_resource(ResourceManager.FOOD):
 		resource_manager.set_resource(ResourceManager.FOOD, 0)
-		resource_manager.add_resource(ResourceManager.HOPE, -10)
-		family["filho"]["health"] -= 5
+		resource_manager.add_resource(ResourceManager.HOPE, -5)
+		family.filho.health -= 5
 		add_diary_entry("A fome pesou sobre a casa durante a noite.")
 
-	if family["filho"]["health"] <= 20:
-		family["filho"]["state"] = "grave"
+	if family.filho.health <= 20:
+		family.filho.state = "grave"
 		add_diary_entry("Bart piorou. Sua respiração parece mais fraca.")
-
-	if resource_manager.get_resource(ResourceManager.HOPE) <= 0:
-		end_game()
 
 
 func create_medicine() -> void:
@@ -311,10 +262,6 @@ func rest() -> void:
 	advance_time(2)
 
 
-func get_current_patient() -> Patient:
-	return current_patient
-
-
 func get_resource(resource_name: String) -> int:
 	return resource_manager.get_resource(resource_name)
 
@@ -324,27 +271,48 @@ func get_resources() -> Dictionary:
 
 
 func get_hope() -> int:
-	return resource_manager.get_resource(ResourceManager.HOPE)
+	return resource_manager.hope
 
 
 func get_food() -> int:
-	return resource_manager.get_resource(ResourceManager.FOOD)
+	return resource_manager.food
 
 
 func get_herbs() -> int:
-	return resource_manager.get_resource(ResourceManager.HERBS)
+	return resource_manager.herbs
 
 
 func get_medicine() -> int:
-	return resource_manager.get_resource(ResourceManager.MEDICINE)
+	return resource_manager.medicine
 
 
 func get_money() -> int:
-	return resource_manager.get_resource(ResourceManager.MONEY)
+	return resource_manager.money
 
 
 func add_diary_entry(text: String) -> void:
 	diary_entries.append(text)
+	diary_updated.emit()
+
+
+func get_save_data() -> Dictionary:
+	return {
+		"time": time_manager.get_snapshot(),
+		"resources": resource_manager.get_snapshot(),
+		"diary_entries": diary_entries,
+		"family": family,
+	}
+
+
+func load_save_data(data: Dictionary) -> void:
+	_setup_managers()
+	time_manager.load_snapshot(data.get("time", {}))
+	resource_manager.load_snapshot(data.get("resources", {}))
+	diary_entries.assign(data.get("diary_entries", []))
+	family = data.get("family", family)
+	_sync_time_mirror()
+	_sync_resources_mirror()
+	_load_patients_for_current_day()
 	diary_updated.emit()
 
 

@@ -111,8 +111,7 @@ func load_snapshot(data: Dictionary) -> void:
 
 
 func _emit_all_changed() -> void:
-	var snapshot := get_snapshot()
-	for resource_name in snapshot.keys():
-		resource_changed.emit(resource_name, snapshot[resource_name])
+	for resource_name in get_snapshot().keys():
+		resource_changed.emit(resource_name, get_resource(resource_name))
 
-	resources_changed.emit(snapshot)
+	resources_changed.emit(get_snapshot())
