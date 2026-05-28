@@ -34,6 +34,7 @@ var salvia: int = 0
 var current_patient: Patient = null
 var family: Dictionary = {}
 
+var game_finished: bool = false
 
 func _ready() -> void:
 	_setup_managers()
@@ -94,6 +95,8 @@ func _setup_managers() -> void:
 
 func start_new_game() -> void:
 	_setup_managers()
+
+	game_finished = false
 
 	time_manager.reset()
 	resource_manager.reset()
@@ -304,6 +307,7 @@ func end_day() -> void:
 
 	if current_day >= time_manager.max_days:
 		_write_final_week_summary()
+		game_finished = true
 		get_tree().change_scene_to_file("res://scenes/diary.tscn")
 		return
 

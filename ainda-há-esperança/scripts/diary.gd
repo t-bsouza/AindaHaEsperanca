@@ -23,7 +23,7 @@ func _update_diary() -> void:
 
 
 func _on_continue_pressed() -> void:
-	if GameState.current_day >= GameState.time_manager.max_days:
+	if GameState.game_finished:
 		get_tree().change_scene_to_file("res://scenes/menu.tscn")
 		return
 
