@@ -102,6 +102,9 @@ func get_diary_title() -> String:
 		if patient_manager.get_survived_count() <= 0:
 			return "Game Over"
 
+		if patient_manager.get_dead_count() <= 0:
+			return "Vitória"
+
 		return "Fim da Semana"
 
 	return "Diário"
@@ -422,37 +425,18 @@ func _write_final_week_summary() -> void:
 	var dead_count := int(stats["dead"])
 	var total_count := int(stats["total"])
 
-	var text := "Diário - Fim da Semana\n\n"
-	text += "Sete dias se passaram desde que comecei a atender os doentes desta vila.\n\n"
-	text += "Resultado final:\n"
-	text += "- Sobreviventes: %d\n" % survived_count
-	text += "- Mortos: %d\n" % dead_count
-	text += "- Total de pacientes: %d\n\n" % total_count
+	var dead_patient_names := patient_manager.get_dead_patient_names()
+	var survived_patient_names := patient_manager.get_survived_patient_names()
 
-	if survived_count <= 0:
-		text += "Ninguém sobreviveu. A vila silenciou, e meu diário termina como uma confissão de fracasso.\n\n"
-	elif survived_count == 1:
-		text += "Infelizmente, só uma pessoa sobreviveu. Tente salvar mais vidas na próxima vez.\n\n"
-	elif survived_count <= 3:
-		text += "Algumas pessoas sobreviveram, mas muitas vidas ainda se perderam pelo caminho.\n\n"
-	elif dead_count == 0:
-		text += "Todos sobreviveram. Contra a peste, contra o medo e contra a falta de recursos, a esperança resistiu.\n\n"
-	else:
-		text += "Nem todos sobreviveram, mas houve esperança. Algumas vidas continuaram por causa das suas escolhas.\n\n"
-
-	text += "Pontuação final: %d/100" % _calculate_final_score(survived_count, dead_count, total_count)
+	var text := GameNarrativeService.build_final_week_summary(
+		survived_count,
+		dead_count,
+		total_count,
+		dead_patient_names,
+		survived_patient_names
+	)
 
 	add_diary_entry(text)
-
-
-func _calculate_final_score(survived_count: int, dead_count: int, total_count: int) -> int:
-	if total_count <= 0:
-		return 0
-
-	var survival_score := int(round((float(survived_count) / float(total_count)) * 100.0))
-	var death_penalty := dead_count * 5
-
-	return clamp(survival_score - death_penalty, 0, 100)
 
 
 func _check_early_game_over() -> void:
@@ -480,15 +464,13 @@ func _write_game_over_summary() -> void:
 
 	var dead_count := patient_manager.get_dead_count()
 	var total_count := patient_manager.get_total_campaign_patients_count()
+	var dead_patient_names := patient_manager.get_dead_patient_names()
 
-	var text := "Diário - Game Over\n\n"
-	text += "O último paciente morreu.\n\n"
-	text += "Não há mais ninguém para salvar. A peste venceu antes do fim da semana.\n\n"
-	text += "Resultado final:\n"
-	text += "- Sobreviventes: 0\n"
-	text += "- Mortos: %d\n" % dead_count
-	text += "- Total de pacientes: %d\n\n" % total_count
-	text += "Pontuação final: 0/100"
+	var text := GameNarrativeService.build_game_over_summary(
+		dead_count,
+		total_count,
+		dead_patient_names
+	)
 
 	add_diary_entry(text)
 
