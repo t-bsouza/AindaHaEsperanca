@@ -52,7 +52,7 @@ offset_bottom = 442.0
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 26
-text = "Dia 1 de 7"
+text = "Segunda-feira"
 
 [node name="TimeLabel" type="Label" parent="CanvasLayer/DiaryPanel/LeftPage/LeftContent" unique_id=1524779479]
 layout_mode = 2

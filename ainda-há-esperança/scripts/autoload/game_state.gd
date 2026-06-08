@@ -69,6 +69,30 @@ func get_current_day() -> int:
 	return time_manager.current_day
 
 
+func get_day_name(day: int) -> String:
+	match day:
+		1:
+			return "Segunda-feira"
+		2:
+			return "Terça-feira"
+		3:
+			return "Quarta-feira"
+		4:
+			return "Quinta-feira"
+		5:
+			return "Sexta-feira"
+		6:
+			return "Sábado"
+		7:
+			return "Domingo"
+		_:
+			return "Dia desconhecido"
+
+
+func get_current_day_name() -> String:
+	return get_day_name(get_current_day())
+
+
 func get_current_hour() -> int:
 	return time_manager.current_hour
 
@@ -387,7 +411,7 @@ func _register_waiting_patients_at_day_end() -> void:
 
 
 func _write_day_summary(day_finished: int) -> void:
-	var text := "Diário - Dia %d\n\n" % day_finished
+	var text := "Diário - %s\n\n" % get_day_name(day_finished)
 	text += "Hoje foi mais um dia pesado durante a peste.\n\n"
 
 	if current_day_actions.is_empty():
