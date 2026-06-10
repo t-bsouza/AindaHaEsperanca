@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://361uqge1f8mn"
-path="res://.godot/imported/claraMendes.png-9076fe07c75f951fc365defaa38afdaa.ctex"
+uid="uid://dt6ljqdfiibyr"
+path="res://.godot/imported/AntonioFerreira.png-f6604a196325921458bec3392ff699a8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://data/assets/claraMendes.png"
-dest_files=["res://.godot/imported/claraMendes.png-9076fe07c75f951fc365defaa38afdaa.ctex"]
+source_file="res://data/assets/personagens/AntonioFerreira.png"
+dest_files=["res://.godot/imported/AntonioFerreira.png-f6604a196325921458bec3392ff699a8.ctex"]
 
 [params]
 

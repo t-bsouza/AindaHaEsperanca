@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ccuyu6n16pynt"
-path="res://.godot/imported/meninoDesconhecido.png-8e98dd0d8475eb8746b517fe754747db.ctex"
+uid="uid://bulnbr576cgdh"
+path="res://.godot/imported/claraMendes.png-2aae7122ea66e1d3aca6d62bace34e77.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://data/assets/meninoDesconhecido.png"
-dest_files=["res://.godot/imported/meninoDesconhecido.png-8e98dd0d8475eb8746b517fe754747db.ctex"]
+source_file="res://data/assets/personagens/claraMendes.png"
+dest_files=["res://.godot/imported/claraMendes.png-2aae7122ea66e1d3aca6d62bace34e77.ctex"]
 
 [params]
 
