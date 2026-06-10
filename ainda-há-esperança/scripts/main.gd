@@ -20,8 +20,8 @@ extends Node2D
 @onready var action_menu: CanvasLayer = $CanvasLayer
 @onready var world_diary_button: TextureButton = $background/diaryButton
 
-@onready var background_blocker_right = $BackgroundBlockerRight
-@onready var background_blocker_left = $BackgroundBlockerLeft
+@onready var background_blocker_right = $CanvasLayer/DiaryPanel/BackgroundBlockerRight
+@onready var background_blocker_left = $CanvasLayer/DiaryPanel/BackgroundBlockerLeft
 
 @onready var patient_display: Control = $Character
 @onready var patient_sprite: TextureRect = $Character/CharacterSprite
