@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://rm8fg0vmodua"]
 
 [ext_resource type="Script" uid="uid://dsc7ujnj3pg4j" path="res://scripts/main.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://btkfel8rqmk3g" path="res://data/assets/main_room_rot.jpg" id="2_0wfyh"]
 [ext_resource type="Texture2D" uid="uid://cfivvd7qg3nbx" path="res://data/assets/diario_img/diario_1.png" id="2_sugp2"]
+[ext_resource type="Texture2D" uid="uid://c767u61baws6q" path="res://data/assets/main_room.png" id="3_sugp2"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sugp2"]
 load_path = "res://.godot/imported/diario.png-52b5e54487dbc21328d10bf0b316daaa.ctex"
@@ -250,7 +250,7 @@ color = Color(0, 0, 0, 0)
 [node name="background" type="TextureRect" parent="." unique_id=296363308]
 offset_right = 1152.0
 offset_bottom = 648.0
-texture = ExtResource("2_0wfyh")
+texture = ExtResource("3_sugp2")
 expand_mode = 2
 
 [node name="diaryButton" type="TextureButton" parent="background" unique_id=655714691]
@@ -272,9 +272,9 @@ offset_bottom = 40.0
 [node name="CharacterSprite" type="TextureRect" parent="Character" unique_id=1170115559]
 layout_mode = 0
 offset_left = 464.0
-offset_top = 257.0
+offset_top = 272.0
 offset_right = 686.0
-offset_bottom = 526.0
+offset_bottom = 541.0
 mouse_filter = 0
 expand_mode = 1
 stretch_mode = 5
