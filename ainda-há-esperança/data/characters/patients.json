@@ -11,7 +11,7 @@
 		"symptoms": ["febre", "tosse", "fraqueza"],
 		"severity": 35,
 		"introduction_dialogue": "Doutor... meu pai não para de tossir. Agora eu também sinto a febre.",
-		"sprite": "res://data/assets/claraMendes.png"
+		"sprite": "res://data/assets/personagens/naraMachado.png"
 	  }
 	],
 	"2": [
@@ -24,7 +24,7 @@
 		"disease_name": "delirio_febril",
 		"symptoms": ["calafrios", "manchas", "delírio"],
 		"severity": 55,
-		"sprite": "res://data/assets/meninoDesconhecido.png"
+		"sprite": "res://data/assets/personagens/AntonioFerreira.png"
 	  }
 	],
 	"3": [
@@ -37,7 +37,7 @@
 		"disease_name": "febre_putrida",
 		"symptoms": ["febre alta", "dor no peito", "fraqueza"],
 		"severity": 70,
-		"sprite": "res://data/assets/claraMendes.png"
+		"sprite": "res://data/assets/personagens/claraMendes.png"
 	  }
 	],
 	"4": [
@@ -50,7 +50,7 @@
 		"disease_name": "tosse_negra",
 		"symptoms": ["insônia", "tosse seca", "dor de cabeça"],
 		"severity": 40,
-		"sprite": "res://data/assets/meninoDesconhecido.png"
+		"sprite": "res://data/assets/personagens/tomas.png"
 
 	  }
 	],
@@ -64,7 +64,7 @@
 		"disease_name": "febre_putrida",
 		"symptoms": ["fraqueza extrema", "vômito", "febre"],
 		"severity": 65,
-		"sprite": "res://data/assets/claraMendes.png"
+		"sprite": "res://data/assets/personagens/donaPerpetua.png"
 	  }
 	],
 	"6": [
@@ -77,7 +77,7 @@
 		"disease_name": "delirio_febril",
 		"symptoms": ["manchas roxas", "delírio", "febre alta"],
 		"severity": 80,
-		"sprite": "res://data/assets/meninoDesconhecido.png"
+		"sprite": "res://data/assets/personagens/meninoDesconhecido.png"
 	  }
 	],
 	"7": [
@@ -90,7 +90,7 @@
 		"disease_name": "tosse_negra",
 		"symptoms": ["tosse com sangue", "fraqueza", "dor no peito"],
 		"severity": 75,
-		"sprite": "res://data/assets/meninoDesconhecido.png"
+		"sprite": "res://data/assets/personagens/padreAlves.png"
 	  }
 	]
   }

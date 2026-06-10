@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bw83kek15tsqg"
-path="res://.godot/imported/main_room.jpeg-85a06aa519b5f47e8f04832e47db9231.ctex"
+uid="uid://bulnbr576cgdh"
+path="res://.godot/imported/claraMendes.png-2aae7122ea66e1d3aca6d62bace34e77.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://data/assets/main_room.jpeg"
-dest_files=["res://.godot/imported/main_room.jpeg-85a06aa519b5f47e8f04832e47db9231.ctex"]
+source_file="res://data/assets/personagens/claraMendes.png"
+dest_files=["res://.godot/imported/claraMendes.png-2aae7122ea66e1d3aca6d62bace34e77.ctex"]
 
 [params]
 
