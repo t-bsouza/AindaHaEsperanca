@@ -33,6 +33,7 @@ var current_day_patient_results: Array[String] = []
 var game_finished: bool = false
 var final_summary_written: bool = false
 
+var current_patient_examined: bool = false
 
 func _ready() -> void:
 	_setup_managers()
@@ -318,6 +319,20 @@ func _is_valid_herb_combination(combination: Dictionary) -> bool:
 
 func _on_patient_changed(patient: Patient) -> void:
 	patient_changed.emit(patient)
+
+func examine_current_patient() -> Array[String]:
+	if not patient_manager.has_current_patient():
+		return []
+
+	var patient := patient_manager.current_patient
+
+	var symptoms := patient.examine()
+
+	current_day_actions.append(
+		"Examinei %s." % patient.patient_name
+	)
+
+	return symptoms
 
 
 func _on_queue_empty() -> void:
