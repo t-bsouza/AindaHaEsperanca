@@ -272,6 +272,7 @@ func _show_patient_speech() -> void:
 		text = _generate_patient_default_speech(patient)
 
 	_animate_speech_bubble()
+	_small_bubble_bounce()
 	await get_tree().process_frame
 	speech_bubble.reset_size()
 
@@ -286,6 +287,7 @@ func _generate_patient_default_speech(patient: Patient) -> String:
 	return "Doutor... não me sinto bem."
 
 func _animate_speech_bubble() -> void:
+	
 	speech_bubble.scale = Vector2(0.85, 0.85)
 	speech_bubble.modulate.a = 0.0
 	speech_bubble.visible = true
@@ -293,6 +295,7 @@ func _animate_speech_bubble() -> void:
 	var tween := create_tween()
 	tween.tween_property(speech_bubble, "scale", Vector2.ONE, 0.15)
 	tween.parallel().tween_property(speech_bubble, "modulate:a", 1.0, 0.15)
+	
 
 func _type_patient_text(text: String) -> void:
 	if is_typing_speech:
@@ -306,6 +309,14 @@ func _type_patient_text(text: String) -> void:
 		await get_tree().create_timer(0.025).timeout
 
 	is_typing_speech = false
+
+func _small_bubble_bounce() -> void:
+	var original_pos := speech_bubble.position
+
+	var tween := create_tween()
+	tween.tween_property(speech_bubble, "position", original_pos + Vector2(0, -6), 0.08)
+	tween.tween_property(speech_bubble, "position", original_pos, 0.08)
+
 
 func _show_current_info() -> void:
 	current_info_container.visible = true
