@@ -295,7 +295,9 @@ theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="SpeechText" type="Label" parent="Character/SpeechBubble/MarginContainer" unique_id=343894286]
+[node name="SpeechText" type="RichTextLabel" parent="Character/SpeechBubble/MarginContainer" unique_id=519726963]
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
-autowrap_mode = 3
+bbcode_enabled = true
+fit_content = true
+scroll_active = false

@@ -44,7 +44,7 @@ extends Node2D
 @onready var day_log_label: RichTextLabel = $CanvasLayer/DiaryPanel/LeftPage/DayLogContainer/DayLogLabel
 
 @onready var speech_bubble: PanelContainer = $Character/SpeechBubble
-@onready var speech_text: Label = $Character/SpeechBubble/MarginContainer/SpeechText
+@onready var speech_text: RichTextLabel = $Character/SpeechBubble/MarginContainer/SpeechText
 
 
 var current_mixture := {
@@ -309,6 +309,7 @@ func _type_patient_text(text: String) -> void:
 	speech_text.text = ""
 
 	for i in range(text.length()):
+		#speech_text.text += "[wave amp=5 freq=4]" + text[i] + "[/wave]"
 		speech_text.text += text[i]
 
 
