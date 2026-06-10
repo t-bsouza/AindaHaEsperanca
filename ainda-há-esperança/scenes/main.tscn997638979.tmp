@@ -279,23 +279,15 @@ mouse_filter = 0
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SpeechBubble" type="PanelContainer" parent="Character" unique_id=732885997]
+[node name="SpeechBubble" type="Panel" parent="Character" unique_id=431775049]
 visible = false
-custom_minimum_size = Vector2(240, 0)
 layout_mode = 0
 offset_left = 683.0
 offset_top = 297.0
 offset_right = 856.0
 offset_bottom = 398.0
 
-[node name="MarginContainer" type="MarginContainer" parent="Character/SpeechBubble" unique_id=981803331]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="SpeechText" type="Label" parent="Character/SpeechBubble/MarginContainer" unique_id=343894286]
-custom_minimum_size = Vector2(220, 0)
-layout_mode = 2
-autowrap_mode = 3
+[node name="SpeechText" type="Label" parent="Character/SpeechBubble" unique_id=343894286]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

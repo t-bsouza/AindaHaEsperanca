@@ -43,6 +43,9 @@ extends Node2D
 @onready var selected_day_label: Label = $CanvasLayer/DiaryPanel/LeftPage/DayLogContainer/SelectedDayLabel
 @onready var day_log_label: RichTextLabel = $CanvasLayer/DiaryPanel/LeftPage/DayLogContainer/DayLogLabel
 
+@onready var speech_bubble: PanelContainer = $Character/SpeechBubble
+@onready var speech_text: Label = $Character/SpeechBubble/MarginContainer/SpeechText
+
 
 var current_mixture := {
 	ResourceManager.ARTEMISIA: 0,
@@ -50,6 +53,7 @@ var current_mixture := {
 	ResourceManager.SALVIA: 0,
 }
 
+var is_typing_speech := false
 
 func _ready() -> void:
 	background_blocker_left.gui_input.connect(_on_background_clicked)
@@ -80,6 +84,9 @@ func _ready() -> void:
 	page_7.pressed.connect(func(): _show_day_summary(7))
 	
 	page_back_button.pressed.connect(_on_page_back_button_pressed)
+
+	patient_sprite.gui_input.connect(_on_patient_sprite_clicked)
+	speech_bubble.visible = false
 
 	_configure_button_texts()
 	_connect_game_state_signals()
@@ -113,6 +120,7 @@ func _on_patient_changed(_patient) -> void:
 	_update_ui()
 
 func _update_patient_sprite() -> void:
+	speech_bubble.visible = false
 	var patient := GameState.get_current_patient()
 
 	if patient == null:
@@ -247,6 +255,57 @@ func _show_day_summary(day: int) -> void:
 
 	current_info_container.visible = false
 	day_log_container.visible = true
+
+func _on_patient_sprite_clicked(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_show_patient_speech()
+
+func _show_patient_speech() -> void:
+	var patient := GameState.get_current_patient()
+
+	if patient == null:
+		return
+
+	var text := patient.introduction_dialogue
+
+	if text.strip_edges().is_empty():
+		text = _generate_patient_default_speech(patient)
+
+	_animate_speech_bubble()
+	await get_tree().process_frame
+	speech_bubble.reset_size()
+
+	await _type_patient_text(text)
+	
+	
+
+func _generate_patient_default_speech(patient: Patient) -> String:
+	if not patient.symptoms.is_empty():
+		return "Doutor... estou sentindo %s." % ", ".join(patient.symptoms)
+
+	return "Doutor... não me sinto bem."
+
+func _animate_speech_bubble() -> void:
+	speech_bubble.scale = Vector2(0.85, 0.85)
+	speech_bubble.modulate.a = 0.0
+	speech_bubble.visible = true
+
+	var tween := create_tween()
+	tween.tween_property(speech_bubble, "scale", Vector2.ONE, 0.15)
+	tween.parallel().tween_property(speech_bubble, "modulate:a", 1.0, 0.15)
+
+func _type_patient_text(text: String) -> void:
+	if is_typing_speech:
+		return
+
+	is_typing_speech = true
+	speech_text.text = ""
+
+	for i in text.length():
+		speech_text.text += text[i]
+		await get_tree().create_timer(0.025).timeout
+
+	is_typing_speech = false
 
 func _show_current_info() -> void:
 	current_info_container.visible = true
