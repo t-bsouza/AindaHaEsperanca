@@ -44,7 +44,8 @@ extends Node2D
 @onready var day_log_label: RichTextLabel = $CanvasLayer/DiaryPanel/LeftPage/DayLogContainer/DayLogLabel
 
 @onready var speech_bubble: PanelContainer = $Character/SpeechBubble
-@onready var speech_text: RichTextLabel = $Character/SpeechBubble/MarginContainer/SpeechText
+@onready var speech_text: RichTextLabel = $Character/SpeechBubble/MarginContainer/VBoxContainer/SpeechText
+@onready var examine_button: Button = $Character/SpeechBubble/MarginContainer/VBoxContainer/ExamineButton
 
 
 var current_mixture := {
@@ -88,6 +89,9 @@ func _ready() -> void:
 	patient_sprite.gui_input.connect(_on_patient_sprite_clicked)
 	speech_bubble.visible = false
 
+	examine_button.pressed.connect(_on_examine_patient_pressed)
+	examine_button.visible = false
+
 	_configure_button_texts()
 	_connect_game_state_signals()
 	_update_ui()
@@ -120,20 +124,23 @@ func _on_patient_changed(_patient) -> void:
 	_update_ui()
 
 func _update_patient_sprite() -> void:
-	speech_bubble.visible = false
 	var patient := GameState.get_current_patient()
 
 	if patient == null:
+		speech_bubble.visible = false
 		patient_display.visible = false
 		patient_sprite.texture = null
 		return
 
+	patient_display.visible = true
+
 	if patient.sprite_path.strip_edges().is_empty():
-		patient_display.visible = false
-		patient_sprite.texture = null
 		return
 
 	var texture := load(patient.sprite_path)
+
+	if texture != null:
+		patient_sprite.texture = texture
 
 	if texture == null:
 		push_warning("Sprite de paciente não encontrado: %s" % patient.sprite_path)
@@ -210,13 +217,18 @@ func _update_patient_panel() -> void:
 		_update_patient_sprite()
 		return
 
-	patient_label.text = "Paciente: %s\n%s\nEstado: %s" % [
+	patient_label.text = "Paciente: %s\nEstado: %s" % [
 		patient.patient_name,
-		patient.description,
-		patient.get_health_state_text(),
+		patient.get_health_state_text()
 	]
 
-	symptoms_label.text = "Sintomas: %s" % ", ".join(patient.symptoms)
+	if patient.was_examined:
+		symptoms_label.text = "Sintomas: %s\n\n%s" % [
+			", ".join(patient.symptoms),
+			patient.description
+		]
+	else:
+		symptoms_label.text = "Paciente ainda não examinado."
 
 	_set_patient_buttons_enabled(not patient.was_treated)
 	_update_patient_sprite()
@@ -269,20 +281,34 @@ func _show_patient_speech() -> void:
 	var text := patient.introduction_dialogue
 
 	if text.strip_edges().is_empty():
-		text = _generate_patient_default_speech(patient)
+		text = "Doutor... não me sinto bem."
 
-	
-	speech_text.text = ""
-
-	
-	speech_bubble.size = Vector2.ZERO
-	speech_bubble.reset_size()
+	examine_button.visible = true
 
 	_animate_speech_bubble()
+	await get_tree().process_frame
+	speech_bubble.reset_size()
 
-	await _type_patient_text(text)	
+	await _type_patient_text(text)
 	
+func _on_examine_patient_pressed() -> void:
+	var patient := GameState.get_current_patient()
 
+	if patient == null:
+		return
+
+	GameState.examine_current_patient()
+
+	var text := patient.examination_dialogue
+
+	if text.strip_edges().is_empty():
+		text = "Tenho sentido %s." % ", ".join(patient.symptoms)
+
+	await _type_patient_text(text)
+
+	_update_ui()
+	
+	
 func _generate_patient_default_speech(patient: Patient) -> String:
 	if not patient.symptoms.is_empty():
 		return "Doutor... estou sentindo %s." % ", ".join(patient.symptoms)
