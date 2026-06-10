@@ -271,13 +271,16 @@ func _show_patient_speech() -> void:
 	if text.strip_edges().is_empty():
 		text = _generate_patient_default_speech(patient)
 
-	_animate_speech_bubble()
-	_small_bubble_bounce()
-	await get_tree().process_frame
+	
+	speech_text.text = ""
+
+	
+	speech_bubble.size = Vector2.ZERO
 	speech_bubble.reset_size()
 
-	await _type_patient_text(text)
-	
+	_animate_speech_bubble()
+
+	await _type_patient_text(text)	
 	
 
 func _generate_patient_default_speech(patient: Patient) -> String:
@@ -302,10 +305,16 @@ func _type_patient_text(text: String) -> void:
 		return
 
 	is_typing_speech = true
+
 	speech_text.text = ""
 
-	for i in text.length():
+	for i in range(text.length()):
 		speech_text.text += text[i]
+
+
+		await get_tree().process_frame
+		speech_bubble.reset_size()
+
 		await get_tree().create_timer(0.025).timeout
 
 	is_typing_speech = false
