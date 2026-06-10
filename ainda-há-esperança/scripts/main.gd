@@ -55,6 +55,8 @@ var current_mixture := {
 }
 
 var is_typing_speech := false
+var showing_examined_dialogue := false
+
 
 func _ready() -> void:
 	background_blocker_left.gui_input.connect(_on_background_clicked)
@@ -90,7 +92,7 @@ func _ready() -> void:
 	speech_bubble.visible = false
 
 	examine_button.pressed.connect(_on_examine_patient_pressed)
-	examine_button.visible = false
+	examine_button.visible = true
 
 	_configure_button_texts()
 	_connect_game_state_signals()
@@ -120,9 +122,16 @@ func _on_world_diary_pressed() -> void:
 	day_log_label.text = ""
 	
 	
-func _on_patient_changed(_patient) -> void:
-	_update_ui()
+func _on_patient_changed(_patient = null) -> void:
+	showing_examined_dialogue = false
 
+	examine_button.visible = true
+
+	speech_bubble.visible = false
+
+	_update_ui()
+	
+	
 func _update_patient_sprite() -> void:
 	var patient := GameState.get_current_patient()
 
@@ -278,19 +287,27 @@ func _show_patient_speech() -> void:
 	if patient == null:
 		return
 
-	var text := patient.introduction_dialogue
+	var text := ""
 
-	if text.strip_edges().is_empty():
-		text = "Doutor... não me sinto bem."
+	if showing_examined_dialogue:
+		text = patient.examination_dialogue
 
-	examine_button.visible = true
+		if text.strip_edges().is_empty():
+			text = "Tenho sentido %s." % ", ".join(patient.symptoms)
+
+	else:
+		text = patient.introduction_dialogue
+
+		if text.strip_edges().is_empty():
+			text = "Doutor... não me sinto bem."
 
 	_animate_speech_bubble()
+
 	await get_tree().process_frame
-	speech_bubble.reset_size()
 
 	await _type_patient_text(text)
 	
+		
 func _on_examine_patient_pressed() -> void:
 	var patient := GameState.get_current_patient()
 
@@ -299,15 +316,23 @@ func _on_examine_patient_pressed() -> void:
 
 	GameState.examine_current_patient()
 
+	showing_examined_dialogue = true
+
+	examine_button.visible = false
+
 	var text := patient.examination_dialogue
 
 	if text.strip_edges().is_empty():
 		text = "Tenho sentido %s." % ", ".join(patient.symptoms)
 
+	_animate_speech_bubble()
+
+	await get_tree().process_frame
+
 	await _type_patient_text(text)
 
 	_update_ui()
-	
+		
 	
 func _generate_patient_default_speech(patient: Patient) -> String:
 	if not patient.symptoms.is_empty():
