@@ -145,22 +145,30 @@ func get_day_summary(day: int) -> String:
 	return str(diary_summaries_by_day.get(day, ""))
 
 
-func treat_current_patient_with_combination(combination: Dictionary) -> void:
+func treat_current_patient_with_combination(combination: Dictionary) -> bool:
 	if game_finished:
-		return
+		return false
 
 	if not patient_manager.has_current_patient():
-		return
+		return false
 
 	if not _is_valid_herb_combination(combination):
-		add_diary_entry("Tentei preparar uma mistura, mas errei a proporção. Preciso usar exatamente três porções de ervas.")
-		return
+		var invalid_message := "Tentei preparar uma mistura, mas errei a proporção. Preciso usar exatamente três porções de ervas."
+		current_day_actions.append(invalid_message)
+		add_diary_entry(invalid_message)
+		return false
+
+	if not resource_manager.has_herb_combination(combination):
+		var insufficient_message := "Tentei preparar uma mistura, mas minhas ervas não foram suficientes."
+		current_day_actions.append(insufficient_message)
+		add_diary_entry(insufficient_message)
+		return false
 
 	if not resource_manager.consume_herb_combination(combination):
-		var message := "Tentei preparar uma mistura, mas minhas ervas não foram suficientes."
-		current_day_actions.append(message)
-		add_diary_entry(message)
-		return
+		var consume_error_message := "Tentei preparar a mistura, mas algo deu errado ao separar as ervas."
+		current_day_actions.append(consume_error_message)
+		add_diary_entry(consume_error_message)
+		return false
 
 	var patient := patient_manager.current_patient
 	var effect_data := disease_manager.get_effect_for_combination(patient.disease_name, combination)
@@ -183,6 +191,8 @@ func treat_current_patient_with_combination(combination: Dictionary) -> void:
 
 	if not game_finished:
 		advance_time(3)
+
+	return true
 
 
 func refuse_current_patient() -> void:
@@ -336,10 +346,24 @@ func _load_patients_for_current_day() -> void:
 
 
 func _is_valid_herb_combination(combination: Dictionary) -> bool:
+	var allowed_herbs := [
+		ResourceManager.ARTEMISIA,
+		ResourceManager.VALERIANA,
+		ResourceManager.SALVIA,
+	]
+
 	var total := 0
 
 	for herb_name in combination.keys():
-		total += int(combination[herb_name])
+		if not allowed_herbs.has(herb_name):
+			return false
+
+		var amount := int(combination[herb_name])
+
+		if amount < 0:
+			return false
+
+		total += amount
 
 	return total == REQUIRED_HERB_TOTAL
 

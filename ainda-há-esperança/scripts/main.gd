@@ -249,10 +249,23 @@ func _update_mixture_label() -> void:
 
 func _set_patient_buttons_enabled(enabled: bool) -> void:
 	var mixture_total := _get_current_mixture_total()
+	var mixture_full := mixture_total >= 3
 
-	add_artemisia_button.disabled = not enabled or mixture_total >= 3
-	add_valeriana_button.disabled = not enabled or mixture_total >= 3
-	add_salvia_button.disabled = not enabled or mixture_total >= 3
+	var artemisia_in_mixture := int(current_mixture[ResourceManager.ARTEMISIA])
+	var valeriana_in_mixture := int(current_mixture[ResourceManager.VALERIANA])
+	var salvia_in_mixture := int(current_mixture[ResourceManager.SALVIA])
+
+	add_artemisia_button.disabled = not enabled \
+		or mixture_full \
+		or artemisia_in_mixture >= GameState.get_artemisia()
+
+	add_valeriana_button.disabled = not enabled \
+		or mixture_full \
+		or valeriana_in_mixture >= GameState.get_valeriana()
+
+	add_salvia_button.disabled = not enabled \
+		or mixture_full \
+		or salvia_in_mixture >= GameState.get_salvia()
 
 	apply_mixture_button.disabled = not enabled or mixture_total != 3
 	clear_mixture_button.disabled = mixture_total == 0
@@ -417,12 +430,32 @@ func _get_current_mixture_total() -> int:
 		+ int(current_mixture[ResourceManager.SALVIA])
 
 
+func _get_available_herb_amount(herb_name: String) -> int:
+	match herb_name:
+		ResourceManager.ARTEMISIA:
+			return GameState.get_artemisia()
+		ResourceManager.VALERIANA:
+			return GameState.get_valeriana()
+		ResourceManager.SALVIA:
+			return GameState.get_salvia()
+		_:
+			return 0
+
 
 func _add_herb_to_mixture(herb_name: String) -> void:
 	if _get_current_mixture_total() >= 3:
 		return
 
-	current_mixture[herb_name] = int(current_mixture[herb_name]) + 1
+	if not current_mixture.has(herb_name):
+		return
+
+	var current_amount_in_mixture := int(current_mixture[herb_name])
+	var available_amount := _get_available_herb_amount(herb_name)
+
+	if current_amount_in_mixture >= available_amount:
+		return
+
+	current_mixture[herb_name] = current_amount_in_mixture + 1
 	_update_ui()
 
 
@@ -453,8 +486,12 @@ func _on_apply_mixture_pressed() -> void:
 	if _get_current_mixture_total() != 3:
 		return
 
-	GameState.treat_current_patient_with_combination(current_mixture.duplicate(true))
-	_clear_mixture()
+	var treatment_applied := GameState.treat_current_patient_with_combination(current_mixture.duplicate(true))
+
+	if treatment_applied:
+		_clear_mixture()
+	else:
+		_update_ui()
 
 
 func _on_clear_mixture_pressed() -> void:
@@ -468,6 +505,7 @@ func _on_refuse_pressed() -> void:
 
 func _on_collect_herbs_pressed() -> void:
 	GameState.collect_herbs()
+	_update_ui()
 
 
 func _on_rest_pressed() -> void:
