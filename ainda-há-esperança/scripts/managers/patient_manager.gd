@@ -217,3 +217,34 @@ func _add_unique_patient(target: Array[Patient], patient: Patient) -> void:
 
 	if not target.has(patient):
 		target.append(patient)
+
+func get_dead_patients() -> Array[Patient]:
+	return dead_patients.duplicate()
+
+
+func get_survived_patients() -> Array[Patient]:
+	var survivors: Array[Patient] = []
+
+	for patient in all_patients_seen:
+		if patient.current_health_state != Patient.HealthState.DEAD:
+			survivors.append(patient)
+
+	return survivors
+
+
+func get_dead_patient_names() -> Array[String]:
+	var names: Array[String] = []
+
+	for patient in dead_patients:
+		names.append(patient.patient_name)
+
+	return names
+
+
+func get_survived_patient_names() -> Array[String]:
+	var names: Array[String] = []
+
+	for patient in get_survived_patients():
+		names.append(patient.patient_name)
+
+	return names
