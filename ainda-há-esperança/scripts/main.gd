@@ -96,6 +96,7 @@ func _ready() -> void:
 
 	_configure_button_texts()
 	_connect_game_state_signals()
+	_apply_game_fonts()
 	_update_ui()
 
 
@@ -515,3 +516,48 @@ func _on_rest_pressed() -> void:
 
 func _on_back_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/menu.tscn")
+
+
+func _apply_game_fonts() -> void:
+	MainFontApplier.apply_main_fonts(
+		day_label,
+		time_label,
+		resources_label,
+		patient_label,
+		symptoms_label,
+		mixture_label,
+		selected_day_label,
+		day_log_label,
+		speech_text,
+		_get_action_buttons(),
+		_get_bookmark_buttons()
+	)
+
+
+func _get_action_buttons() -> Array[Button]:
+	return [
+		diary_button,
+		add_artemisia_button,
+		add_valeriana_button,
+		add_salvia_button,
+		apply_mixture_button,
+		clear_mixture_button,
+		refuse_button,
+		collect_herbs_button,
+		rest_button,
+		back_button,
+		page_back_button,
+		examine_button,
+	]
+
+
+func _get_bookmark_buttons() -> Array[Button]:
+	return [
+		page_1,
+		page_2,
+		page_3,
+		page_4,
+		page_5,
+		page_6,
+		page_7,
+	]
