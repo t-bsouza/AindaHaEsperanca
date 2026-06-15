@@ -240,6 +240,11 @@ custom_minimum_size = Vector2(260, 38)
 layout_mode = 2
 text = "Recusar atendimento"
 
+[node name="CollectHerbsButton" type="Button" parent="CanvasLayer/DiaryPanel/RightPage/rightContent" unique_id=131041764]
+custom_minimum_size = Vector2(260, 38)
+layout_mode = 2
+text = "Coletar ervas"
+
 [node name="RestButton" type="Button" parent="CanvasLayer/DiaryPanel/RightPage/rightContent" unique_id=571949939]
 custom_minimum_size = Vector2(260, 38)
 layout_mode = 2

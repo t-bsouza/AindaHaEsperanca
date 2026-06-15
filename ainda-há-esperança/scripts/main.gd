@@ -6,16 +6,14 @@ extends Node2D
 @onready var symptoms_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/SymptomsLabel
 @onready var mixture_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/MixtureLabel
 
-@onready var diary_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/DiaryButton
 @onready var add_artemisia_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/ArtemisiaButton
 @onready var add_valeriana_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/ValerianaButton
 @onready var add_salvia_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/SalviaButton
 @onready var apply_mixture_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/ApplyMixtureButton
 @onready var clear_mixture_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/ClearMixtureButton
 @onready var refuse_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/RefuseButton
-@onready var collect_herbs_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/CollectHerbsButton
+#@onready var collect_herbs_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/CollectHerbsButton
 @onready var rest_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/RestButton
-@onready var back_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/BackButton
 
 @onready var action_menu: CanvasLayer = $CanvasLayer
 @onready var world_diary_button: TextureButton = $background/diaryButton
@@ -87,16 +85,15 @@ func _ready() -> void:
 	action_menu.visible = false
 	world_diary_button.pressed.connect(_on_world_diary_pressed)
 
-	diary_button.pressed.connect(_on_diary_pressed)
 	add_artemisia_button.pressed.connect(_on_add_artemisia_pressed)
 	add_valeriana_button.pressed.connect(_on_add_valeriana_pressed)
 	add_salvia_button.pressed.connect(_on_add_salvia_pressed)
 	apply_mixture_button.pressed.connect(_on_apply_mixture_pressed)
 	clear_mixture_button.pressed.connect(_on_clear_mixture_pressed)
 	refuse_button.pressed.connect(_on_refuse_pressed)
-	collect_herbs_button.pressed.connect(_on_collect_herbs_pressed)
+	#collect_herbs_button.pressed.connect(_on_collect_herbs_pressed)
 	rest_button.pressed.connect(_on_rest_pressed)
-	back_button.pressed.connect(_on_back_pressed)
+	
 
 	GameState.patient_changed.connect(_on_patient_changed)
 
@@ -147,7 +144,7 @@ func _configure_button_texts() -> void:
 	add_salvia_button.text = "Adicionar sálvia"
 	apply_mixture_button.text = "Aplicar mistura"
 	clear_mixture_button.text = "Limpar mistura"
-	collect_herbs_button.text = "Coletar ervas"
+	#collect_herbs_button.text = "Coletar ervas"
 	rest_button.text = "Descansar"
 
 
@@ -695,16 +692,14 @@ func _apply_game_fonts() -> void:
 
 func _get_action_buttons() -> Array[Button]:
 	return [
-		diary_button,
 		add_artemisia_button,
 		add_valeriana_button,
 		add_salvia_button,
 		apply_mixture_button,
 		clear_mixture_button,
 		refuse_button,
-		collect_herbs_button,
+		#collect_herbs_button,
 		rest_button,
-		back_button,
 		page_back_button,
 		examine_button,
 	]
