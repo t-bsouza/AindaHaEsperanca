@@ -54,9 +54,9 @@ extends Node2D
 @onready var cancel_door_button: Button = $CanvasLayer2/DoorOptionsPanel/VBoxContainer/CancelDoorButton
 
 @onready var forage_locations_panel: Control = $CanvasLayer2/ForageLocationsPanel
-@onready var forest_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/ForestButton
-@onready var river_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/RiverButton
-@onready var cemetery_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/CemeteryButton
+@onready var artemisia_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/ForageArtemisia
+@onready var valeriana_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/ForageValeriana
+@onready var salvia_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/ForageSalvia
 @onready var cancel_forage_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/CancelForageButton
 
 
@@ -113,9 +113,9 @@ func _ready() -> void:
 	leave_to_forage_button.pressed.connect(_on_leave_to_forage_pressed)
 	cancel_door_button.pressed.connect(_on_cancel_door_pressed)
 
-	forest_button.pressed.connect(func(): _on_forage_location_selected("forest"))
-	river_button.pressed.connect(func(): _on_forage_location_selected("river"))
-	cemetery_button.pressed.connect(func(): _on_forage_location_selected("cemetery"))
+	artemisia_button.pressed.connect(func(): _on_forage_location_selected("artemisia"))
+	valeriana_button.pressed.connect(func(): _on_forage_location_selected("valeriana"))
+	salvia_button.pressed.connect(func(): _on_forage_location_selected("salvia"))
 	cancel_forage_button.pressed.connect(_on_cancel_forage_pressed)
 	
 	_configure_button_texts()
@@ -445,11 +445,10 @@ func _on_cancel_forage_pressed() -> void:
 func _on_forage_location_selected(location: String) -> void:
 	forage_locations_panel.visible = false
 
-	var result = GameState.forage(location)
+	GameState.forage(location)
 
 	_update_ui()
 
-	print(result.get("text", ""))
 
 
 func _small_bubble_bounce() -> void:

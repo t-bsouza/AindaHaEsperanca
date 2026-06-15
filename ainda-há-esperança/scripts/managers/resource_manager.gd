@@ -43,7 +43,7 @@ func set_resource(resource_name: String, value: int) -> void:
 	match resource_name:
 		ARTEMISIA:
 			artemisia = value
-		VALERIANA:
+		VALERIANA: 
 			valeriana = value
 		SALVIA:
 			salvia = value

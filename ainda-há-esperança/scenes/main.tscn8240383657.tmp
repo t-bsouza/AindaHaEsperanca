@@ -332,17 +332,17 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_sugp2")
 [node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer2/ForageLocationsPanel" unique_id=979035652]
 layout_mode = 2
 
-[node name="ForageArtemisia" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1200923455]
+[node name="ForestButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1200923455]
 layout_mode = 2
-text = "Artemísia  +1h"
+text = "Floresta"
 
-[node name="ForageValeriana" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1142085971]
+[node name="RiverButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1142085971]
 layout_mode = 2
-text = "Valeriana  +2h"
+text = "Riacho"
 
-[node name="ForageSalvia" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1382883404]
+[node name="CemeteryButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1382883404]
 layout_mode = 2
-text = "Sálvia +3h"
+text = "Cemitério"
 
 [node name="CancelForageButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1772975620]
 layout_mode = 2

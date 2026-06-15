@@ -332,21 +332,79 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_sugp2")
 [node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer2/ForageLocationsPanel" unique_id=979035652]
 layout_mode = 2
 
-[node name="ForageArtemisia" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1200923455]
+[node name="ForestButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1200923455]
 layout_mode = 2
-text = "Artemísia  +1h"
+text = "Floresta"
 
-[node name="ForageValeriana" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1142085971]
+[node name="RiverButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1142085971]
 layout_mode = 2
-text = "Valeriana  +2h"
+text = "Riacho"
 
-[node name="ForageSalvia" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1382883404]
+[node name="CemeteryButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1382883404]
 layout_mode = 2
-text = "Sálvia +3h"
+text = "Cemitério"
 
 [node name="CancelForageButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1772975620]
 layout_mode = 2
 text = "Voltar"
+
+[node name="CemeteryCard" type="PanelContainer" parent="CanvasLayer2/ForageLocationsPanel" unique_id=13966749]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer2/ForageLocationsPanel/CemeteryCard" unique_id=884436537]
+layout_mode = 2
+
+[node name="CemeteryTitleLabel" type="Label" parent="CanvasLayer2/ForageLocationsPanel/CemeteryCard/VBoxContainer" unique_id=1180832740]
+layout_mode = 2
+text = "Cemitério
+"
+
+[node name="CemeteryDescriptionLabel" type="Label" parent="CanvasLayer2/ForageLocationsPanel/CemeteryCard/VBoxContainer" unique_id=764776155]
+layout_mode = 2
+text = "Tempo: 3 horas
+Ingrediente: Sálvia"
+
+[node name="CemeteryButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/CemeteryCard/VBoxContainer" unique_id=1194836224]
+layout_mode = 2
+text = "Ir para o cemitério"
+
+[node name="ForestCard" type="PanelContainer" parent="CanvasLayer2/ForageLocationsPanel" unique_id=1947120796]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer2/ForageLocationsPanel/ForestCard" unique_id=1650862303]
+layout_mode = 2
+
+[node name="ForestTitleLabel" type="Label" parent="CanvasLayer2/ForageLocationsPanel/ForestCard/VBoxContainer" unique_id=2040503808]
+layout_mode = 2
+text = "Floresta"
+
+[node name="ForestDescriptionLabel" type="Label" parent="CanvasLayer2/ForageLocationsPanel/ForestCard/VBoxContainer" unique_id=164578966]
+layout_mode = 2
+text = "Tempo: 2 horas
+Ingredientes: Artemísia"
+
+[node name="ForestButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/ForestCard/VBoxContainer" unique_id=163077155]
+layout_mode = 2
+text = "Ir para floresta"
+
+[node name="RiverCard" type="PanelContainer" parent="CanvasLayer2/ForageLocationsPanel" unique_id=991421612]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer2/ForageLocationsPanel/RiverCard" unique_id=842340238]
+layout_mode = 2
+
+[node name="RiverTitleLabel" type="Label" parent="CanvasLayer2/ForageLocationsPanel/RiverCard/VBoxContainer" unique_id=44312922]
+layout_mode = 2
+text = "Riacho"
+
+[node name="RiverDescriptionLabel" type="Label" parent="CanvasLayer2/ForageLocationsPanel/RiverCard/VBoxContainer" unique_id=972591529]
+layout_mode = 2
+text = "Tempo: 2 horas
+Ingrediente: Valeriana"
+
+[node name="RiverButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/RiverCard/VBoxContainer" unique_id=1574270249]
+layout_mode = 2
+text = "Ir para o riacho"
 
 [node name="DoorOptionsPanel" type="PanelContainer" parent="CanvasLayer2" unique_id=192848907]
 offset_left = 859.0
