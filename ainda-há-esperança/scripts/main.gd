@@ -1,5 +1,5 @@
 extends Node2D
-@onready var day_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/DayLabel
+@onready var day_label: Label = $CanvasLayer/DiaryPanel/LeftPage/DayLabel
 @onready var time_label: Label = $background/TimeLabel
 @onready var resources_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/ResourcesLabel
 @onready var patient_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/PatientLabel
@@ -64,6 +64,12 @@ extends Node2D
 @onready var valeriana_line: Line2D = $CanvasLayer2/ForageConnectionLines/ValerianaLine
 @onready var salvia_line: Line2D = $CanvasLayer2/ForageConnectionLines/SalviaLine
 
+
+@onready var settings_button : TextureButton = $CanvasLayer3/SettingsButton
+@onready var menu_options_panel : PanelContainer = $CanvasLayer3/PanelContainer
+@onready var exit_to_menu_button : Button = $CanvasLayer3/PanelContainer/VBoxContainer/ExitToMenuButton
+@onready var exit_game_btton : Button = $CanvasLayer3/PanelContainer/VBoxContainer/ExitGameButton
+
 var current_mixture := {
 	ResourceManager.ARTEMISIA: 0,
 	ResourceManager.VALERIANA: 0,
@@ -122,6 +128,12 @@ func _ready() -> void:
 	valeriana_button.pressed.connect(func(): _on_forage_location_selected("valeriana"))
 	salvia_button.pressed.connect(func(): _on_forage_location_selected("salvia"))
 	cancel_forage_button.pressed.connect(_on_cancel_forage_pressed)
+	
+	settings_button.pressed.connect(_on_setting_button_pressed)
+	menu_options_panel.visible = false
+	exit_to_menu_button.pressed.connect(_on_back_pressed)
+	exit_game_btton.pressed.connect(_on_quit_pressed)
+	
 	
 	_configure_button_texts()
 	_connect_game_state_signals()
@@ -456,6 +468,15 @@ func _on_leave_to_forage_pressed() -> void:
 	_popup_button(valeriana_button, 0.07)
 	_popup_button(salvia_button, 0.14)
 	
+func _on_setting_button_pressed() -> void:
+	menu_options_panel.visible = not menu_options_panel.visible
+
+	if menu_options_panel.visible:
+		_popup_control(menu_options_panel)
+
+func _on_quit_pressed() -> void:
+	get_tree().quit()
+
 
 
 func _on_cancel_door_pressed() -> void:
