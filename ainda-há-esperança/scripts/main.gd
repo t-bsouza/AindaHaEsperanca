@@ -59,6 +59,10 @@ extends Node2D
 @onready var salvia_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/ForageSalvia
 @onready var cancel_forage_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/CancelForageButton
 
+@onready var forage_connection_lines: Node2D = $CanvasLayer2/ForageConnectionLines
+@onready var artemisia_line: Line2D = $CanvasLayer2/ForageConnectionLines/ArtemisiaLine
+@onready var valeriana_line: Line2D = $CanvasLayer2/ForageConnectionLines/ValerianaLine
+@onready var salvia_line: Line2D = $CanvasLayer2/ForageConnectionLines/SalviaLine
 
 var current_mixture := {
 	ResourceManager.ARTEMISIA: 0,
@@ -108,6 +112,7 @@ func _ready() -> void:
 
 	door_options_panel.visible = false
 	forage_locations_panel.visible = false
+	_set_forage_lines_visible(false)
 
 	door_button.pressed.connect(_on_door_pressed)
 	leave_to_forage_button.pressed.connect(_on_leave_to_forage_pressed)
@@ -431,25 +436,111 @@ func _type_patient_text(text: String) -> void:
 func _on_door_pressed() -> void:
 	door_options_panel.visible = true
 	forage_locations_panel.visible = false
+	_set_forage_lines_visible(false)
+
+	_popup_control(door_options_panel)
 
 func _on_leave_to_forage_pressed() -> void:
-	door_options_panel.visible = false
+	# mantém o botão principal visível
+	door_options_panel.visible = true
+
+	# mostra os botões de ingredientes
 	forage_locations_panel.visible = true
+
+	await get_tree().process_frame
+
+	_update_forage_connection_lines()
+	_set_forage_lines_visible(true)
+
+	_popup_button(artemisia_button, 0.00)
+	_popup_button(valeriana_button, 0.07)
+	_popup_button(salvia_button, 0.14)
+	
+
 
 func _on_cancel_door_pressed() -> void:
 	door_options_panel.visible = false
+	forage_locations_panel.visible = false
+	_set_forage_lines_visible(false)
 
 func _on_cancel_forage_pressed() -> void:
 	forage_locations_panel.visible = false
+	_set_forage_lines_visible(false)
 
 func _on_forage_location_selected(location: String) -> void:
+	door_options_panel.visible = false
 	forage_locations_panel.visible = false
+	_set_forage_lines_visible(false)
 
 	GameState.forage(location)
 
 	_update_ui()
 
+func _popup_control(control: Control) -> void:
+	control.scale = Vector2(0.85, 0.85)
+	control.modulate.a = 0.0
 
+	await get_tree().process_frame
+	control.pivot_offset = control.size / 2.0
+
+	var tween := create_tween()
+	tween.tween_property(control, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(control, "modulate:a", 1.0, 0.15)
+
+func _popup_button(button: Button, delay: float) -> void:
+	button.scale = Vector2(0.65, 0.65)
+	button.modulate.a = 0.0
+	button.pivot_offset = button.size / 2.0
+
+	var tween := create_tween()
+	tween.tween_interval(delay)
+	tween.tween_property(button, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(button, "modulate:a", 1.0, 0.15)
+
+func _set_forage_lines_visible(value: bool) -> void:
+	artemisia_line.visible = value
+	valeriana_line.visible = value
+	salvia_line.visible = value
+
+func _update_forage_connection_lines() -> void:
+	var start := _get_control_right(leave_to_forage_button)
+
+	artemisia_line.points = [
+		start,
+		_get_control_left(artemisia_button)
+	]
+
+	valeriana_line.points = [
+		start,
+		_get_control_left(valeriana_button)
+	]
+
+	salvia_line.points = [
+		start,
+		_get_control_left(salvia_button)
+	]
+
+	artemisia_line.modulate.a = 0.0
+	valeriana_line.modulate.a = 0.0
+	salvia_line.modulate.a = 0.0
+
+	var tween := create_tween()
+	tween.tween_property(artemisia_line, "modulate:a", 1.0, 0.12)
+	tween.parallel().tween_property(valeriana_line, "modulate:a", 1.0, 0.12)
+	tween.parallel().tween_property(salvia_line, "modulate:a", 1.0, 0.12)
+
+	
+func _get_control_right(control: Control) -> Vector2:
+	return Vector2(
+		control.global_position.x + control.size.x + 5,
+		control.global_position.y + control.size.y / 2.0
+	)
+
+func _get_control_left(control: Control) -> Vector2:
+	return Vector2(
+		control.global_position.x,
+		control.global_position.y + control.size.y / 2.0
+	)
 
 func _small_bubble_bounce() -> void:
 	var original_pos := speech_bubble.position

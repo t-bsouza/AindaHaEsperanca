@@ -323,10 +323,10 @@ color = Color(0, 0, 0, 0)
 [node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=1201920451]
 
 [node name="ForageLocationsPanel" type="PanelContainer" parent="CanvasLayer2" unique_id=1743973767]
-offset_left = 982.0
-offset_top = 76.0
-offset_right = 1121.0
-offset_bottom = 212.0
+offset_left = 857.0
+offset_top = 115.0
+offset_right = 996.0
+offset_bottom = 251.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_sugp2")
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer2/ForageLocationsPanel" unique_id=979035652]
@@ -349,10 +349,10 @@ layout_mode = 2
 text = "Voltar"
 
 [node name="DoorOptionsPanel" type="PanelContainer" parent="CanvasLayer2" unique_id=192848907]
-offset_left = 693.0
-offset_top = 108.0
-offset_right = 903.0
-offset_bottom = 187.0
+offset_left = 859.0
+offset_top = 116.0
+offset_right = 995.0
+offset_bottom = 180.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_jyhfs")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer2/DoorOptionsPanel" unique_id=190230874]
@@ -370,27 +370,12 @@ text = "Voltar"
 
 [node name="ArtemisiaLine" type="Line2D" parent="CanvasLayer2/ForageConnectionLines" unique_id=833116804]
 visible = false
-width = 4.0
-default_color = Color(0.34533376, 0.35027462, 0.3947424, 1)
-joint_mode = 2
-begin_cap_mode = 2
-end_cap_mode = 2
-antialiased = true
+width = 2.0
 
 [node name="ValerianaLine" type="Line2D" parent="CanvasLayer2/ForageConnectionLines" unique_id=843042277]
 visible = false
-width = 4.0
-default_color = Color(0.34509805, 0.34901962, 0.39607844, 1)
-joint_mode = 2
-begin_cap_mode = 2
-end_cap_mode = 2
-antialiased = true
+width = 2.0
 
 [node name="SalviaLine" type="Line2D" parent="CanvasLayer2/ForageConnectionLines" unique_id=1313587920]
 visible = false
-width = 4.0
-default_color = Color(0.34509805, 0.34901962, 0.39607844, 1)
-joint_mode = 2
-begin_cap_mode = 2
-end_cap_mode = 2
-antialiased = true
+width = 2.0
