@@ -478,3 +478,58 @@ func _write_game_over_summary() -> void:
 	)
 
 	add_diary_entry(text)
+
+
+func forage(location: String) -> Dictionary:
+	var result := {
+		"location": location,
+		"resources": {},
+		"time_cost": 0,
+		"text": ""
+	}
+
+	match location:
+		"forest":
+			result["time_cost"] = 2
+			time_manager.advance_time(2)
+
+			resource_manager.add_resource("artemisia", 2)
+			resource_manager.add_resource("valeriana", 1)
+
+			result["resources"] = {
+				"artemisia": 2,
+				"valeriana": 1
+			}
+
+			result["text"] = "Você passou algumas horas na floresta e encontrou artemísia e valeriana."
+
+		"river":
+			result["time_cost"] = 2
+			time_manager.advance_time(2)
+
+			resource_manager.add_resource("valeriana", 2)
+			resource_manager.add_resource("salvia", 1)
+
+			result["resources"] = {
+				"valeriana": 2,
+				"salvia": 1
+			}
+
+			result["text"] = "Você procurou ingredientes próximos ao rio e encontrou valeriana e sálvia."
+
+		"cemetery":
+			result["time_cost"] = 3
+			time_manager.advance_time(3)
+
+			resource_manager.add_resource("salvia", 2)
+
+			result["resources"] = {
+				"salvia": 2
+			}
+
+			result["text"] = "Você caminhou até o cemitério e encontrou sálvia entre as pedras frias."
+
+	if not result["text"].is_empty():
+		current_day_actions.append(result["text"])
+
+	return result

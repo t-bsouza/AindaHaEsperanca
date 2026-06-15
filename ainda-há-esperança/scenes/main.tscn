@@ -10,10 +10,79 @@ load_path = "res://.godot/imported/diario.png-52b5e54487dbc21328d10bf0b316daaa.c
 [node name="Main" type="Node2D" unique_id=325692335]
 script = ExtResource("1")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1742487758]
+[node name="background" type="TextureRect" parent="." unique_id=296363308]
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("3_sugp2")
+expand_mode = 2
+
+[node name="DoorButton" type="Button" parent="background" unique_id=484955197]
+layout_mode = 0
+offset_left = 606.0
+offset_top = 176.0
+offset_right = 837.0
+offset_bottom = 515.0
+
+[node name="diaryButton" type="TextureButton" parent="background" unique_id=655714691]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 519.0
+offset_right = 680.0
+offset_bottom = 631.0
+texture_normal = SubResource("CompressedTexture2D_sugp2")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Character" type="Control" parent="." unique_id=1104911426]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CharacterSprite" type="TextureRect" parent="Character" unique_id=1170115559]
+layout_mode = 0
+offset_left = 464.0
+offset_top = 272.0
+offset_right = 686.0
+offset_bottom = 541.0
+mouse_filter = 0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SpeechBubble" type="PanelContainer" parent="Character" unique_id=732885997]
 visible = false
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 0
+offset_left = 683.0
+offset_top = 297.0
+offset_right = 856.0
+offset_bottom = 398.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Character/SpeechBubble" unique_id=981803331]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Character/SpeechBubble/MarginContainer" unique_id=1617026452]
+layout_mode = 2
+
+[node name="SpeechText" type="RichTextLabel" parent="Character/SpeechBubble/MarginContainer/VBoxContainer" unique_id=519726963]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="ExamineButton" type="Button" parent="Character/SpeechBubble/MarginContainer/VBoxContainer" unique_id=1411686402]
+layout_mode = 2
+text = "Examinar paciente"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1742487758]
 
 [node name="DiaryPanel" type="Control" parent="CanvasLayer" unique_id=1774190993]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -247,64 +316,46 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0)
 
-[node name="background" type="TextureRect" parent="." unique_id=296363308]
-offset_right = 1152.0
-offset_bottom = 648.0
-texture = ExtResource("3_sugp2")
-expand_mode = 2
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=1201920451]
 
-[node name="diaryButton" type="TextureButton" parent="background" unique_id=655714691]
-layout_mode = 0
-offset_left = 476.0
-offset_top = 519.0
-offset_right = 680.0
-offset_bottom = 631.0
-texture_normal = SubResource("CompressedTexture2D_sugp2")
-ignore_texture_size = true
-stretch_mode = 0
+[node name="ForageLocationsPanel" type="PanelContainer" parent="CanvasLayer2" unique_id=1743973767]
+offset_left = 870.0
+offset_top = 245.0
+offset_right = 1009.0
+offset_bottom = 327.0
 
-[node name="Character" type="Control" parent="." unique_id=1104911426]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="CharacterSprite" type="TextureRect" parent="Character" unique_id=1170115559]
-layout_mode = 0
-offset_left = 464.0
-offset_top = 272.0
-offset_right = 686.0
-offset_bottom = 541.0
-mouse_filter = 0
-expand_mode = 1
-stretch_mode = 5
-
-[node name="SpeechBubble" type="PanelContainer" parent="Character" unique_id=732885997]
-visible = false
-custom_minimum_size = Vector2(240, 0)
-layout_mode = 0
-offset_left = 683.0
-offset_top = 297.0
-offset_right = 856.0
-offset_bottom = 398.0
-
-[node name="MarginContainer" type="MarginContainer" parent="Character/SpeechBubble" unique_id=981803331]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Character/SpeechBubble/MarginContainer" unique_id=1617026452]
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer2/ForageLocationsPanel" unique_id=979035652]
 layout_mode = 2
 
-[node name="SpeechText" type="RichTextLabel" parent="Character/SpeechBubble/MarginContainer/VBoxContainer" unique_id=519726963]
-custom_minimum_size = Vector2(220, 0)
+[node name="ForestButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1200923455]
 layout_mode = 2
-bbcode_enabled = true
-fit_content = true
-scroll_active = false
+text = "Floresta"
 
-[node name="ExamineButton" type="Button" parent="Character/SpeechBubble/MarginContainer/VBoxContainer" unique_id=1411686402]
+[node name="RiverButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1142085971]
 layout_mode = 2
-text = "Examinar paciente"
+text = "Riacho"
+
+[node name="CemeteryButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1382883404]
+layout_mode = 2
+text = "Cemitério"
+
+[node name="CancelForageButton" type="Button" parent="CanvasLayer2/ForageLocationsPanel/VBoxContainer2" unique_id=1772975620]
+layout_mode = 2
+text = "Cancelar"
+
+[node name="DoorOptionsPanel" type="PanelContainer" parent="CanvasLayer2" unique_id=192848907]
+offset_left = 859.0
+offset_top = 116.0
+offset_right = 995.0
+offset_bottom = 180.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer2/DoorOptionsPanel" unique_id=190230874]
+layout_mode = 2
+
+[node name="LeaveToForageButton" type="Button" parent="CanvasLayer2/DoorOptionsPanel/VBoxContainer" unique_id=1191149519]
+layout_mode = 2
+text = "Sair para coletar"
+
+[node name="CancelDoorButton" type="Button" parent="CanvasLayer2/DoorOptionsPanel/VBoxContainer" unique_id=2109376288]
+layout_mode = 2
+text = "Cancelar"

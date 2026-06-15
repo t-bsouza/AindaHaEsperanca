@@ -47,6 +47,18 @@ extends Node2D
 @onready var speech_text: RichTextLabel = $Character/SpeechBubble/MarginContainer/VBoxContainer/SpeechText
 @onready var examine_button: Button = $Character/SpeechBubble/MarginContainer/VBoxContainer/ExamineButton
 
+@onready var door_button: Button = $background/DoorButton
+
+@onready var door_options_panel: Control = $CanvasLayer2/DoorOptionsPanel
+@onready var leave_to_forage_button: Button = $CanvasLayer2/DoorOptionsPanel/VBoxContainer/LeaveToForageButton
+@onready var cancel_door_button: Button = $CanvasLayer2/DoorOptionsPanel/VBoxContainer/CancelDoorButton
+
+@onready var forage_locations_panel: Control = $CanvasLayer2/ForageLocationsPanel
+@onready var forest_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/ForestButton
+@onready var river_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/RiverButton
+@onready var cemetery_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/CemeteryButton
+@onready var cancel_forage_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/CancelForageButton
+
 
 var current_mixture := {
 	ResourceManager.ARTEMISIA: 0,
@@ -94,6 +106,18 @@ func _ready() -> void:
 	examine_button.pressed.connect(_on_examine_patient_pressed)
 	examine_button.visible = true
 
+	door_options_panel.visible = false
+	forage_locations_panel.visible = false
+
+	door_button.pressed.connect(_on_door_pressed)
+	leave_to_forage_button.pressed.connect(_on_leave_to_forage_pressed)
+	cancel_door_button.pressed.connect(_on_cancel_door_pressed)
+
+	forest_button.pressed.connect(func(): _on_forage_location_selected("forest"))
+	river_button.pressed.connect(func(): _on_forage_location_selected("river"))
+	cemetery_button.pressed.connect(func(): _on_forage_location_selected("cemetery"))
+	cancel_forage_button.pressed.connect(_on_cancel_forage_pressed)
+	
 	_configure_button_texts()
 	_connect_game_state_signals()
 	_apply_game_fonts()
@@ -134,7 +158,7 @@ func _on_patient_changed(_patient = null) -> void:
 	
 	
 func _update_patient_sprite() -> void:
-	var patient := GameState.get_current_patient()
+	var patient = GameState.get_current_patient()
 
 	if patient == null:
 		speech_bubble.visible = false
@@ -214,7 +238,7 @@ func _update_resource_label() -> void:
 
 
 func _update_patient_panel() -> void:
-	var patient := GameState.get_current_patient()
+	var patient = GameState.get_current_patient()
 
 	if patient == null:
 		patient_label.text = "Nenhum paciente aguardando."
@@ -277,7 +301,7 @@ func _set_patient_buttons_enabled(enabled: bool) -> void:
 func _show_day_summary(day: int) -> void:
 	selected_day_label.text = "Diário - %s" % GameState.get_day_name(day)
 
-	var summary := GameState.get_day_summary(day)
+	var summary = GameState.get_day_summary(day)
 
 	if summary.is_empty():
 		day_log_label.text = "O registro deste dia ainda não foi finalizado."
@@ -315,7 +339,7 @@ func _on_patient_sprite_clicked(event: InputEvent) -> void:
 		_show_patient_speech()
 
 func _show_patient_speech() -> void:
-	var patient := GameState.get_current_patient()
+	var patient = GameState.get_current_patient()
 
 	if patient == null:
 		return
@@ -342,7 +366,7 @@ func _show_patient_speech() -> void:
 	
 		
 func _on_examine_patient_pressed() -> void:
-	var patient := GameState.get_current_patient()
+	var patient = GameState.get_current_patient()
 
 	if patient == null:
 		return
@@ -353,7 +377,7 @@ func _on_examine_patient_pressed() -> void:
 
 	examine_button.visible = false
 
-	var text := patient.examination_dialogue
+	var text = patient.examination_dialogue
 
 	if text.strip_edges().is_empty():
 		text = "Tenho sentido %s." % ", ".join(patient.symptoms)
@@ -403,6 +427,30 @@ func _type_patient_text(text: String) -> void:
 		await get_tree().create_timer(0.025).timeout
 
 	is_typing_speech = false
+
+func _on_door_pressed() -> void:
+	door_options_panel.visible = true
+	forage_locations_panel.visible = false
+
+func _on_leave_to_forage_pressed() -> void:
+	door_options_panel.visible = false
+	forage_locations_panel.visible = true
+
+func _on_cancel_door_pressed() -> void:
+	door_options_panel.visible = false
+
+func _on_cancel_forage_pressed() -> void:
+	forage_locations_panel.visible = false
+
+func _on_forage_location_selected(location: String) -> void:
+	forage_locations_panel.visible = false
+
+	var result = GameState.forage(location)
+
+	_update_ui()
+
+	print(result.get("text", ""))
+
 
 func _small_bubble_bounce() -> void:
 	var original_pos := speech_bubble.position
@@ -487,7 +535,7 @@ func _on_apply_mixture_pressed() -> void:
 	if _get_current_mixture_total() != 3:
 		return
 
-	var treatment_applied := GameState.treat_current_patient_with_combination(current_mixture.duplicate(true))
+	var treatment_applied = GameState.treat_current_patient_with_combination(current_mixture.duplicate(true))
 
 	if treatment_applied:
 		_clear_mixture()
