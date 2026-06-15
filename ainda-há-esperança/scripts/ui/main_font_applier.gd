@@ -18,7 +18,7 @@ const BOOKMARK_TEXT_SIZE := 16
 
 static func apply_main_fonts(
 	day_label: Label,
-	time_label: Label,
+	#time_label: Label,
 	resources_label: Label,
 	patient_label: Label,
 	symptoms_label: Label,
@@ -32,7 +32,7 @@ static func apply_main_fonts(
 	GameFontApplier.load_fonts()
 
 	GameFontApplier.apply_label_font(day_label, GameFontApplier.title_font, DAY_LABEL_SIZE, TEXT_COLOR)
-	GameFontApplier.apply_label_font(time_label, GameFontApplier.body_font, TIME_LABEL_SIZE, TEXT_COLOR)
+	#GameFontApplier.apply_label_font(time_label, GameFontApplier.body_font, TIME_LABEL_SIZE, TEXT_COLOR)
 	GameFontApplier.apply_label_font(resources_label, GameFontApplier.body_font, RESOURCE_LABEL_SIZE, TEXT_COLOR)
 	GameFontApplier.apply_label_font(patient_label, GameFontApplier.body_font, PATIENT_LABEL_SIZE, TEXT_COLOR)
 	GameFontApplier.apply_label_font(symptoms_label, GameFontApplier.body_font, SYMPTOMS_LABEL_SIZE, TEXT_COLOR)

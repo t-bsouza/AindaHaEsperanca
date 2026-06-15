@@ -1,6 +1,6 @@
 extends Node2D
 @onready var day_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/DayLabel
-@onready var time_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/TimeLabel
+@onready var time_label: Label = $background/TimeLabel
 @onready var resources_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/ResourcesLabel
 @onready var patient_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/PatientLabel
 @onready var symptoms_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/SymptomsLabel
@@ -659,7 +659,7 @@ func _on_back_pressed() -> void:
 func _apply_game_fonts() -> void:
 	MainFontApplier.apply_main_fonts(
 		day_label,
-		time_label,
+		#time_label,
 		resources_label,
 		patient_label,
 		symptoms_label,

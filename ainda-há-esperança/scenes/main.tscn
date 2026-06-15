@@ -37,6 +37,16 @@ texture_normal = SubResource("CompressedTexture2D_sugp2")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="TimeLabel" type="Label" parent="background" unique_id=1524779479]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 67.0
+offset_right = 118.0
+offset_bottom = 91.0
+theme_override_colors/font_color = Color(0.10932068, 0.10932068, 0.10932068, 1)
+theme_override_font_sizes/font_size = 17
+text = "Horário: 07:00"
+
 [node name="Character" type="Control" parent="." unique_id=1104911426]
 layout_mode = 3
 anchors_preset = 0
@@ -127,12 +137,6 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 26
 text = "Segunda-feira"
-
-[node name="TimeLabel" type="Label" parent="CanvasLayer/DiaryPanel/LeftPage/LeftContent" unique_id=1524779479]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 17
-text = "Horário: 07:00"
 
 [node name="ResourcesLabel" type="Label" parent="CanvasLayer/DiaryPanel/LeftPage/LeftContent" unique_id=726859582]
 layout_mode = 2
