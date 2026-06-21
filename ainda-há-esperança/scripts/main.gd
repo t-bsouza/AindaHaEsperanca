@@ -49,13 +49,11 @@ extends Node2D
 
 @onready var door_options_panel: Control = $CanvasLayer2/DoorOptionsPanel
 @onready var leave_to_forage_button: Button = $CanvasLayer2/DoorOptionsPanel/VBoxContainer/LeaveToForageButton
-@onready var cancel_door_button: Button = $CanvasLayer2/DoorOptionsPanel/VBoxContainer/CancelDoorButton
 
 @onready var forage_locations_panel: Control = $CanvasLayer2/ForageLocationsPanel
 @onready var artemisia_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/ForageArtemisia
 @onready var valeriana_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/ForageValeriana
 @onready var salvia_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/ForageSalvia
-@onready var cancel_forage_button: Button = $CanvasLayer2/ForageLocationsPanel/VBoxContainer2/CancelForageButton
 
 @onready var forage_connection_lines: Node2D = $CanvasLayer2/ForageConnectionLines
 @onready var artemisia_line: Line2D = $CanvasLayer2/ForageConnectionLines/ArtemisiaLine
@@ -68,6 +66,9 @@ extends Node2D
 @onready var exit_to_menu_button : Button = $CanvasLayer3/PanelContainer/VBoxContainer/ExitToMenuButton
 @onready var exit_game_btton : Button = $CanvasLayer3/PanelContainer/VBoxContainer/ExitGameButton
 
+@onready var diary_menu_sprite : TextureRect = $CanvasLayer/DiaryPanel/DiaryImage
+
+
 var current_mixture := {
 	ResourceManager.ARTEMISIA: 0,
 	ResourceManager.VALERIANA: 0,
@@ -76,6 +77,22 @@ var current_mixture := {
 
 var is_typing_speech := false
 var showing_examined_dialogue := false
+var settings_menu_just_opened := false
+var door_menu_just_opened := false
+
+var selected_diary_day: int = 0
+
+var diary_default_sprite = "res://data/assets/diario_img/diario_1.png"
+
+var diary_day_textures := {
+	1: preload("res://data/assets/diario_img/diario_1.png"),
+	2: preload("res://data/assets/diario_img/diario_2.png"),
+	3: preload("res://data/assets/diario_img/diario_3.png"),
+	4: preload("res://data/assets/diario_img/diario_4.png"),
+	5: preload("res://data/assets/diario_img/diario_5.png"),
+	6: preload("res://data/assets/diario_img/diario_6.png"),
+	7: preload("res://data/assets/diario_img/diario_7.png"),
+}
 
 
 func _ready() -> void:
@@ -98,12 +115,26 @@ func _ready() -> void:
 	GameState.patient_changed.connect(_on_patient_changed)
 
 	page_1.pressed.connect(func(): _show_day_summary(1))
+	
+	
+	
 	page_2.pressed.connect(func(): _show_day_summary(2))
 	page_3.pressed.connect(func(): _show_day_summary(3))
 	page_4.pressed.connect(func(): _show_day_summary(4))
 	page_5.pressed.connect(func(): _show_day_summary(5))
 	page_6.pressed.connect(func(): _show_day_summary(6))
 	page_7.pressed.connect(func(): _show_day_summary(7))
+	
+	
+
+	_connect_bookmark_button(page_1, 1)
+	_connect_bookmark_button(page_2, 2)
+	_connect_bookmark_button(page_3, 3)
+	_connect_bookmark_button(page_4, 4)
+	_connect_bookmark_button(page_5, 5)
+	_connect_bookmark_button(page_6, 6)
+	_connect_bookmark_button(page_7, 7)
+
 	
 	page_back_button.pressed.connect(_on_page_back_button_pressed)
 
@@ -119,12 +150,12 @@ func _ready() -> void:
 
 	door_button.pressed.connect(_on_door_pressed)
 	leave_to_forage_button.pressed.connect(_on_leave_to_forage_pressed)
-	cancel_door_button.pressed.connect(_on_cancel_door_pressed)
+	
 
 	artemisia_button.pressed.connect(func(): _on_forage_location_selected("artemisia"))
 	valeriana_button.pressed.connect(func(): _on_forage_location_selected("valeriana"))
 	salvia_button.pressed.connect(func(): _on_forage_location_selected("salvia"))
-	cancel_forage_button.pressed.connect(_on_cancel_forage_pressed)
+	
 	
 	settings_button.pressed.connect(_on_setting_button_pressed)
 	menu_options_panel.visible = false
@@ -349,6 +380,7 @@ func _remove_diary_title_from_summary(summary: String) -> String:
 
 	return clean_summary
 func _on_patient_sprite_clicked(event: InputEvent) -> void:
+	
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_show_patient_speech()
 
@@ -443,11 +475,15 @@ func _type_patient_text(text: String) -> void:
 	is_typing_speech = false
 
 func _on_door_pressed() -> void:
+	_close_patient_interaction_ui()
+
 	door_options_panel.visible = true
 	forage_locations_panel.visible = false
-	_set_forage_lines_visible(false)
 
-	_popup_control(door_options_panel)
+	door_menu_just_opened = true
+	await get_tree().process_frame
+	door_menu_just_opened = false
+
 
 func _on_leave_to_forage_pressed() -> void:
 	# mantém o botão principal visível
@@ -469,7 +505,44 @@ func _on_setting_button_pressed() -> void:
 	menu_options_panel.visible = not menu_options_panel.visible
 
 	if menu_options_panel.visible:
-		_popup_control(menu_options_panel)
+		settings_menu_just_opened = true
+		await get_tree().process_frame
+		settings_menu_just_opened = false
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			var mouse_pos := get_viewport().get_mouse_position()
+
+			if menu_options_panel.visible and not settings_menu_just_opened:
+				if not menu_options_panel.get_global_rect().has_point(mouse_pos) and not settings_button.get_global_rect().has_point(mouse_pos):
+					menu_options_panel.visible = false
+					return
+
+			if door_options_panel.visible and not door_menu_just_opened:
+				if not door_options_panel.get_global_rect().has_point(mouse_pos):
+					door_options_panel.visible = false
+					forage_locations_panel.visible = false
+					_set_forage_lines_visible(false)
+					return
+				
+
+func _close_patient_interaction_ui() -> void:
+	if speech_bubble != null:
+		speech_bubble.visible = false
+
+
+func _close_door_interaction_ui() -> void:
+	if door_options_panel.visible:
+		door_options_panel.visible = false
+		forage_locations_panel.visible = false
+		_set_forage_lines_visible(false)
+
+
+
+
+
+
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
@@ -481,9 +554,7 @@ func _on_cancel_door_pressed() -> void:
 	forage_locations_panel.visible = false
 	_set_forage_lines_visible(false)
 
-func _on_cancel_forage_pressed() -> void:
-	forage_locations_panel.visible = false
-	_set_forage_lines_visible(false)
+
 
 func _on_forage_location_selected(location: String) -> void:
 	door_options_panel.visible = false
@@ -715,3 +786,35 @@ func _get_bookmark_buttons() -> Array[Button]:
 		page_6,
 		page_7,
 	]
+
+func _teste_func() -> void:
+	print("algo esta sendo testado")
+	
+
+func _set_diary_texture_for_day(day: int) -> void:
+	if diary_day_textures.has(day):
+		diary_menu_sprite.texture = diary_day_textures[day]
+	else:
+		diary_menu_sprite.texture = diary_default_sprite
+
+func _restore_selected_diary_texture() -> void:
+	if selected_diary_day > 0:
+		_set_diary_texture_for_day(selected_diary_day)
+	else:
+		diary_menu_sprite.texture = diary_default_sprite 
+
+
+func _connect_bookmark_button(button: Button, day: int) -> void:
+	button.mouse_entered.connect(func(): _set_diary_texture_for_day(day))
+	button.mouse_exited.connect(_restore_selected_diary_texture)
+	button.pressed.connect(func(): _on_bookmark_pressed(day))
+	
+func _on_bookmark_pressed(day: int) -> void:
+	selected_diary_day = day
+	_set_diary_texture_for_day(day)
+	_show_day_summary(day)
+
+
+func _on_page_1_mouse_entered() -> void:
+	
+	pass # Replace with function body.
