@@ -69,6 +69,26 @@ extends Node2D
 @onready var diary_menu_sprite : TextureRect = $CanvasLayer/DiaryPanel/DiaryImage
 
 
+var diary_textures := {
+	1: preload("res://data/assets/new_diario_img/diario_1.png"),
+	2: preload("res://data/assets/new_diario_img/diario_2.png"),
+	3: preload("res://data/assets/new_diario_img/diario_3.png"),
+	4: preload("res://data/assets/new_diario_img/diario_4.png"),
+	5: preload("res://data/assets/new_diario_img/diario_5.png"),
+	6: preload("res://data/assets/new_diario_img/diario_6.png"),
+	7: preload("res://data/assets/new_diario_img/diario_7.png")
+}
+
+@onready var bookmark_buttons := {
+	1: $CanvasLayer/DiaryPanel/marca_pagina_pages/page_1,
+	2: $CanvasLayer/DiaryPanel/marca_pagina_pages/page_2,
+	3: $CanvasLayer/DiaryPanel/marca_pagina_pages/page_3,
+	4: $CanvasLayer/DiaryPanel/marca_pagina_pages/page_4,
+	5: $CanvasLayer/DiaryPanel/marca_pagina_pages/page_5,
+	6: $CanvasLayer/DiaryPanel/marca_pagina_pages/page_6,
+	7: $CanvasLayer/DiaryPanel/marca_pagina_pages/page_7
+}
+
 var current_mixture := {
 	ResourceManager.ARTEMISIA: 0,
 	ResourceManager.VALERIANA: 0,
@@ -82,17 +102,6 @@ var door_menu_just_opened := false
 
 var selected_diary_day: int = 0
 
-var diary_default_sprite = "res://data/assets/diario_img/diario_1.png"
-
-var diary_day_textures := {
-	1: preload("res://data/assets/diario_img/diario_1.png"),
-	2: preload("res://data/assets/diario_img/diario_2.png"),
-	3: preload("res://data/assets/diario_img/diario_3.png"),
-	4: preload("res://data/assets/diario_img/diario_4.png"),
-	5: preload("res://data/assets/diario_img/diario_5.png"),
-	6: preload("res://data/assets/diario_img/diario_6.png"),
-	7: preload("res://data/assets/diario_img/diario_7.png"),
-}
 
 
 func _ready() -> void:
@@ -114,16 +123,7 @@ func _ready() -> void:
 
 	GameState.patient_changed.connect(_on_patient_changed)
 
-	page_1.pressed.connect(func(): _show_day_summary(1))
 	
-	
-	
-	page_2.pressed.connect(func(): _show_day_summary(2))
-	page_3.pressed.connect(func(): _show_day_summary(3))
-	page_4.pressed.connect(func(): _show_day_summary(4))
-	page_5.pressed.connect(func(): _show_day_summary(5))
-	page_6.pressed.connect(func(): _show_day_summary(6))
-	page_7.pressed.connect(func(): _show_day_summary(7))
 	
 	
 
@@ -188,6 +188,7 @@ func _on_world_diary_pressed() -> void:
 
 	_show_current_info()
 	_update_ui()
+	_update_diary_sprite_and_bookmarks()
 	selected_day_label.text = ""
 	day_log_label.text = ""
 	
@@ -267,6 +268,7 @@ func _update_ui(_value = null) -> void:
 	_update_resource_label()
 	_update_mixture_label()
 	_update_patient_panel()
+	_update_diary_sprite_and_bookmarks()
 
 
 func _update_day_and_time_labels() -> void:
@@ -540,7 +542,23 @@ func _close_door_interaction_ui() -> void:
 
 
 
+func _update_diary_sprite_and_bookmarks() -> void:
+	var current_day := GameState.get_current_day()
 
+	current_day = clamp(current_day, 1, 7)
+
+	if diary_textures.has(current_day):
+		diary_menu_sprite.texture = diary_textures[current_day]
+
+	for day in bookmark_buttons.keys():
+		var button = bookmark_buttons[day]
+
+		if day <= current_day:
+			button.visible = true
+			button.disabled = false
+		else:
+			button.visible = false
+			button.disabled = true
 
 
 
@@ -792,26 +810,24 @@ func _teste_func() -> void:
 	
 
 func _set_diary_texture_for_day(day: int) -> void:
-	if diary_day_textures.has(day):
-		diary_menu_sprite.texture = diary_day_textures[day]
-	else:
-		diary_menu_sprite.texture = diary_default_sprite
+	day = clamp(day, 1, 7)
 
+	if diary_textures.has(day):
+		diary_menu_sprite.texture = diary_textures[day]
+		
 func _restore_selected_diary_texture() -> void:
+	var current_day: int = clampi(GameState.get_current_day(), 1, 7)
+
 	if selected_diary_day > 0:
 		_set_diary_texture_for_day(selected_diary_day)
 	else:
-		diary_menu_sprite.texture = diary_default_sprite 
-
+		_set_diary_texture_for_day(current_day)
 
 func _connect_bookmark_button(button: Button, day: int) -> void:
-	button.mouse_entered.connect(func(): _set_diary_texture_for_day(day))
-	button.mouse_exited.connect(_restore_selected_diary_texture)
 	button.pressed.connect(func(): _on_bookmark_pressed(day))
 	
 func _on_bookmark_pressed(day: int) -> void:
 	selected_diary_day = day
-	_set_diary_texture_for_day(day)
 	_show_day_summary(day)
 
 
