@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b1w2ndrr8c04m" path="res://data/assets/new_new_gear.png" id="3_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://c767u61baws6q" path="res://data/assets/main_room.png" id="3_sugp2"]
 [ext_resource type="Texture2D" uid="uid://4wmak2etnvlh" path="res://data/assets/new_new_new_new_gear.png" id="3_tbgi4"]
+[ext_resource type="Texture2D" uid="uid://d3385e26wg23j" path="res://data/assets/mortero_temp.png" id="3_tefeu"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sugp2"]
 load_path = "res://.godot/imported/diario.png-52b5e54487dbc21328d10bf0b316daaa.ctex"
@@ -27,6 +28,16 @@ offset_left = 606.0
 offset_top = 176.0
 offset_right = 837.0
 offset_bottom = 515.0
+
+[node name="MorteroImage" type="TextureButton" parent="background" unique_id=104989489]
+layout_mode = 0
+offset_left = 292.0
+offset_top = 481.0
+offset_right = 408.0
+offset_bottom = 633.0
+texture_normal = ExtResource("3_tefeu")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="diaryButton" type="TextureButton" parent="background" unique_id=655714691]
 layout_mode = 0
@@ -93,6 +104,10 @@ scroll_active = false
 [node name="ExamineButton" type="Button" parent="Character/SpeechBubble/MarginContainer/VBoxContainer" unique_id=1411686402]
 layout_mode = 2
 text = "Examinar paciente"
+
+[node name="declineButton" type="Button" parent="Character/SpeechBubble/MarginContainer/VBoxContainer" unique_id=1659099064]
+layout_mode = 2
+text = "Mandar embora"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1742487758]
 
@@ -202,36 +217,6 @@ offset_left = 696.0
 offset_top = 113.0
 offset_right = 956.0
 offset_bottom = 529.0
-
-[node name="ArtemisiaButton" type="Button" parent="CanvasLayer/DiaryPanel/RightPage/rightContent" unique_id=1482012444]
-custom_minimum_size = Vector2(260, 38)
-layout_mode = 2
-text = "Adicionar artemísia"
-
-[node name="ValerianaButton" type="Button" parent="CanvasLayer/DiaryPanel/RightPage/rightContent" unique_id=1654502444]
-custom_minimum_size = Vector2(260, 38)
-layout_mode = 2
-text = "Adicionar valeriana"
-
-[node name="SalviaButton" type="Button" parent="CanvasLayer/DiaryPanel/RightPage/rightContent" unique_id=231406992]
-custom_minimum_size = Vector2(260, 38)
-layout_mode = 2
-text = "Adicionar sálvia"
-
-[node name="ApplyMixtureButton" type="Button" parent="CanvasLayer/DiaryPanel/RightPage/rightContent" unique_id=2079894953]
-custom_minimum_size = Vector2(260, 38)
-layout_mode = 2
-text = "Aplicar mistura"
-
-[node name="ClearMixtureButton" type="Button" parent="CanvasLayer/DiaryPanel/RightPage/rightContent" unique_id=1845698525]
-custom_minimum_size = Vector2(260, 38)
-layout_mode = 2
-text = "Limpar mistura"
-
-[node name="RefuseButton" type="Button" parent="CanvasLayer/DiaryPanel/RightPage/rightContent" unique_id=360058895]
-custom_minimum_size = Vector2(260, 38)
-layout_mode = 2
-text = "Recusar atendimento"
 
 [node name="RestButton" type="Button" parent="CanvasLayer/DiaryPanel/RightPage/rightContent" unique_id=571949939]
 custom_minimum_size = Vector2(260, 38)
@@ -417,3 +402,43 @@ text = "Sair do jogo"
 [node name="Button" type="Button" parent="CanvasLayer3/PanelContainer/VBoxContainer" unique_id=62037623]
 layout_mode = 2
 text = "<ADD MAIS FUNCIONALIDADES>"
+
+[node name="CanvasLayer4" type="CanvasLayer" parent="." unique_id=1049788699]
+
+[node name="MorteroMenu" type="Control" parent="CanvasLayer4" unique_id=1024676860]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer4/MorteroMenu" unique_id=1015259488]
+layout_mode = 0
+offset_left = 232.0
+offset_top = 304.0
+offset_right = 492.0
+offset_bottom = 510.0
+
+[node name="ArtemisiaButton" type="Button" parent="CanvasLayer4/MorteroMenu/VBoxContainer" unique_id=1482012444]
+custom_minimum_size = Vector2(260, 38)
+layout_mode = 2
+text = "Adicionar artemísia"
+
+[node name="ValerianaButton" type="Button" parent="CanvasLayer4/MorteroMenu/VBoxContainer" unique_id=1654502444]
+custom_minimum_size = Vector2(260, 38)
+layout_mode = 2
+text = "Adicionar valeriana"
+
+[node name="SalviaButton" type="Button" parent="CanvasLayer4/MorteroMenu/VBoxContainer" unique_id=231406992]
+custom_minimum_size = Vector2(260, 38)
+layout_mode = 2
+text = "Adicionar sálvia"
+
+[node name="ApplyMixtureButton" type="Button" parent="CanvasLayer4/MorteroMenu/VBoxContainer" unique_id=2079894953]
+custom_minimum_size = Vector2(260, 38)
+layout_mode = 2
+text = "Aplicar mistura"
+
+[node name="ClearMixtureButton" type="Button" parent="CanvasLayer4/MorteroMenu/VBoxContainer" unique_id=1845698525]
+custom_minimum_size = Vector2(260, 38)
+layout_mode = 2
+text = "Limpar mistura"

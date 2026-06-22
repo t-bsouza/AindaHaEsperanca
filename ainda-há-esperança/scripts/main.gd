@@ -6,14 +6,21 @@ extends Node2D
 @onready var symptoms_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/SymptomsLabel
 @onready var mixture_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/MixtureLabel
 
-@onready var add_artemisia_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/ArtemisiaButton
-@onready var add_valeriana_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/ValerianaButton
-@onready var add_salvia_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/SalviaButton
-@onready var apply_mixture_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/ApplyMixtureButton
-@onready var clear_mixture_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/ClearMixtureButton
+@onready var mortero_menu: Control = $CanvasLayer4/MorteroMenu
+@onready var add_artemisia_button: Button =$CanvasLayer4/MorteroMenu/VBoxContainer/ArtemisiaButton
+@onready var add_valeriana_button: Button = $CanvasLayer4/MorteroMenu/VBoxContainer/ValerianaButton
+@onready var add_salvia_button: Button = $CanvasLayer4/MorteroMenu/VBoxContainer/SalviaButton
+@onready var apply_mixture_button: Button = $CanvasLayer4/MorteroMenu/VBoxContainer/ApplyMixtureButton
+@onready var clear_mixture_button: Button = $CanvasLayer4/MorteroMenu/VBoxContainer/ClearMixtureButton
 @onready var refuse_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/RefuseButton
 #@onready var collect_herbs_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/CollectHerbsButton
+@onready var mortero_button: TextureButton = $background/MorteroImage
+
+
+
 @onready var rest_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/RestButton
+
+
 
 @onready var action_menu: CanvasLayer = $CanvasLayer
 @onready var world_diary_button: TextureButton = $background/diaryButton
@@ -44,6 +51,8 @@ extends Node2D
 @onready var speech_bubble: PanelContainer = $Character/SpeechBubble
 @onready var speech_text: RichTextLabel = $Character/SpeechBubble/MarginContainer/VBoxContainer/SpeechText
 @onready var examine_button: Button = $Character/SpeechBubble/MarginContainer/VBoxContainer/ExamineButton
+@onready var decline_patient_button: Button =   $Character/SpeechBubble/MarginContainer/VBoxContainer/declineButton
+
 
 @onready var door_button: Button = $background/DoorButton
 
@@ -102,6 +111,7 @@ var door_menu_just_opened := false
 
 var selected_diary_day: int = 0
 
+var mortero_menu_just_opened := false
 
 
 func _ready() -> void:
@@ -110,13 +120,9 @@ func _ready() -> void:
 	
 	action_menu.visible = false
 	world_diary_button.pressed.connect(_on_world_diary_pressed)
-
-	add_artemisia_button.pressed.connect(_on_add_artemisia_pressed)
-	add_valeriana_button.pressed.connect(_on_add_valeriana_pressed)
-	add_salvia_button.pressed.connect(_on_add_salvia_pressed)
-	apply_mixture_button.pressed.connect(_on_apply_mixture_pressed)
-	clear_mixture_button.pressed.connect(_on_clear_mixture_pressed)
-	refuse_button.pressed.connect(_on_refuse_pressed)
+	
+	decline_patient_button.pressed.connect(_on_refuse_pressed)
+	
 	#collect_herbs_button.pressed.connect(_on_collect_herbs_pressed)
 	rest_button.pressed.connect(_on_rest_pressed)
 	
@@ -162,6 +168,17 @@ func _ready() -> void:
 	exit_to_menu_button.pressed.connect(_on_back_pressed)
 	exit_game_btton.pressed.connect(_on_quit_pressed)
 	
+	mortero_menu.visible = false
+	
+	mortero_button.pressed.connect(_on_mortero_pressed)
+	add_artemisia_button.pressed.connect(_on_add_artemisia_pressed)
+	add_valeriana_button.pressed.connect(_on_add_valeriana_pressed)
+	add_salvia_button.pressed.connect(_on_add_salvia_pressed)
+	apply_mixture_button.pressed.connect(_on_apply_mixture_pressed)
+	clear_mixture_button.pressed.connect(_on_clear_mixture_pressed)
+	
+
+	
 	
 	_configure_button_texts()
 	_connect_game_state_signals()
@@ -185,6 +202,7 @@ func _on_world_diary_pressed() -> void:
 	diary_panel.visible = true
 	background_blocker_left.visible = true
 	background_blocker_right.visible = true
+	_close_mortero_menu()
 
 	_show_current_info()
 	_update_ui()
@@ -342,7 +360,7 @@ func _set_patient_buttons_enabled(enabled: bool) -> void:
 	apply_mixture_button.disabled = not enabled or mixture_total != 3
 	clear_mixture_button.disabled = mixture_total == 0
 
-	refuse_button.disabled = not enabled
+	#refuse_button.disabled = not enabled
 
 
 func _show_day_summary(day: int) -> void:
@@ -478,7 +496,8 @@ func _type_patient_text(text: String) -> void:
 
 func _on_door_pressed() -> void:
 	_close_patient_interaction_ui()
-
+	_close_mortero_menu()
+	
 	door_options_panel.visible = true
 	forage_locations_panel.visible = false
 
@@ -526,6 +545,11 @@ func _unhandled_input(event: InputEvent) -> void:
 					door_options_panel.visible = false
 					forage_locations_panel.visible = false
 					_set_forage_lines_visible(false)
+					return
+					
+			if mortero_menu.visible and not mortero_menu_just_opened:
+				if not mortero_menu.get_global_rect().has_point(mouse_pos) and not mortero_button.get_global_rect().has_point(mouse_pos):
+					mortero_menu.visible = false
 					return
 				
 
@@ -657,6 +681,24 @@ func _small_bubble_bounce() -> void:
 	tween.tween_property(speech_bubble, "position", original_pos, 0.08)
 
 
+func _on_mortero_pressed() -> void:
+	_close_patient_interaction_ui()
+	_close_door_interaction_ui()
+	_close_diary_menu()
+
+	mortero_menu.visible = true
+	_popup_control(mortero_menu)
+
+	mortero_menu_just_opened = true
+	await get_tree().process_frame
+	mortero_menu_just_opened = false
+
+	_update_ui()
+
+func _close_mortero_menu() -> void:
+	mortero_menu.visible = false
+
+
 func _show_current_info() -> void:
 	current_info_container.visible = true
 	day_log_container.visible = false
@@ -711,9 +753,6 @@ func _clear_mixture() -> void:
 	current_mixture[ResourceManager.SALVIA] = 0
 	_update_ui()
 
-
-func _on_diary_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/diary.tscn")
 
 
 func _on_add_artemisia_pressed() -> void:
@@ -791,6 +830,7 @@ func _get_action_buttons() -> Array[Button]:
 		rest_button,
 		page_back_button,
 		examine_button,
+		decline_patient_button,
 	]
 
 
