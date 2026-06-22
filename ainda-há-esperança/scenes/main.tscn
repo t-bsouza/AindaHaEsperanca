@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://rm8fg0vmodua"]
 
 [ext_resource type="Script" uid="uid://dsc7ujnj3pg4j" path="res://scripts/main.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://b1w2ndrr8c04m" path="res://data/assets/new_new_gear.png" id="3_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://c767u61baws6q" path="res://data/assets/main_room.png" id="3_sugp2"]
+[ext_resource type="Texture2D" uid="uid://4wmak2etnvlh" path="res://data/assets/new_new_new_new_gear.png" id="3_tbgi4"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sugp2"]
 load_path = "res://.godot/imported/diario.png-52b5e54487dbc21328d10bf0b316daaa.ctex"
@@ -9,12 +11,6 @@ load_path = "res://.godot/imported/diario.png-52b5e54487dbc21328d10bf0b316daaa.c
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sugp2"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jyhfs"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jyhfs"]
-load_path = "res://.godot/imported/new_gear_1.png-2e81febc4cb65e6c4da7414585b966cd.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tbgi4"]
-load_path = "res://.godot/imported/gear_1.png-a257e306c3f5dbdec956214fd4ac0a99.ctex"
 
 [node name="Main" type="Node2D" unique_id=325692335]
 script = ExtResource("1")
@@ -45,10 +41,11 @@ stretch_mode = 0
 [node name="TimeLabel" type="Label" parent="background" unique_id=1524779479]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 67.0
+offset_top = 6.0
 offset_right = 118.0
-offset_bottom = 91.0
-theme_override_colors/font_color = Color(0.10932068, 0.10932068, 0.10932068, 1)
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1.0482866, 0.32068428, 0.38578525, 1)
+theme_override_colors/font_outline_color = Color(0, 0.5366497, 0.28354928, 1)
 theme_override_font_sizes/font_size = 17
 text = "Horário: 07:00"
 
@@ -395,8 +392,10 @@ offset_top = 11.0
 offset_right = -17.0
 offset_bottom = 59.0
 grow_horizontal = 0
-texture_normal = SubResource("CompressedTexture2D_jyhfs")
-texture_hover = SubResource("CompressedTexture2D_tbgi4")
+texture_normal = ExtResource("3_tbgi4")
+texture_hover = ExtResource("3_jyhfs")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer3" unique_id=1092944824]
 offset_left = 475.0
