@@ -1,10 +1,8 @@
 extends Node2D
 @onready var day_label: Label = $CanvasLayer/DiaryPanel/LeftPage/DayLabel
 @onready var time_label: Label = $background/TimeLabel
-@onready var resources_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/ResourcesLabel
 @onready var patient_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/PatientLabel
 @onready var symptoms_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/SymptomsLabel
-@onready var mixture_label: Label = $CanvasLayer/DiaryPanel/LeftPage/LeftContent/MixtureLabel
 
 @onready var mortero_menu: Control = $CanvasLayer4/MorteroMenu
 @onready var add_artemisia_button: Button =$CanvasLayer4/MorteroMenu/VBoxContainer/ArtemisiaButton
@@ -12,6 +10,11 @@ extends Node2D
 @onready var add_salvia_button: Button = $CanvasLayer4/MorteroMenu/VBoxContainer/SalviaButton
 @onready var apply_mixture_button: Button = $CanvasLayer4/MorteroMenu/VBoxContainer/ApplyMixtureButton
 @onready var clear_mixture_button: Button = $CanvasLayer4/MorteroMenu/VBoxContainer/ClearMixtureButton
+@onready var resources_label: Label = $CanvasLayer4/MorteroMenu/VBoxContainer/ResourcesLabel
+@onready var mixture_label: Label = $CanvasLayer4/MorteroMenu/VBoxContainer/MixtureLabel
+
+
+
 @onready var refuse_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/RefuseButton
 #@onready var collect_herbs_button: Button = $CanvasLayer/DiaryPanel/RightPage/rightContent/CollectHerbsButton
 @onready var mortero_button: TextureButton = $background/MorteroImage
@@ -130,7 +133,11 @@ func _ready() -> void:
 	GameState.patient_changed.connect(_on_patient_changed)
 
 	
-	
+	_connect_interactable_hover(world_diary_button)
+	_connect_interactable_hover(door_button)
+	_connect_interactable_hover(mortero_button)
+	_connect_interactable_hover(patient_sprite)
+	_connect_interactable_hover(settings_button)
 	
 
 	_connect_bookmark_button(page_1, 1)
@@ -459,9 +466,9 @@ func _on_examine_patient_pressed() -> void:
 	
 func _generate_patient_default_speech(patient: Patient) -> String:
 	if not patient.symptoms.is_empty():
-		return "Doutor... estou sentindo %s." % ", ".join(patient.symptoms)
+		return "<fala default. Se voce estiver lendo isso ou deu erro ao carregar o json ou nao existe dialogo> %s." % ", ".join(patient.symptoms)
 
-	return "Doutor... não me sinto bem."
+	return "<fala default. Se voce estiver lendo isso ou deu erro ao carregar o json ou nao existe dialogo>."
 
 func _animate_speech_bubble() -> void:
 	
@@ -564,6 +571,10 @@ func _close_door_interaction_ui() -> void:
 		forage_locations_panel.visible = false
 		_set_forage_lines_visible(false)
 
+func _connect_interactable_hover(control: Control) -> void:
+	control.mouse_filter = Control.MOUSE_FILTER_STOP
+	control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	
 
 
 func _update_diary_sprite_and_bookmarks() -> void:
