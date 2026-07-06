@@ -145,22 +145,30 @@ func get_day_summary(day: int) -> String:
 	return str(diary_summaries_by_day.get(day, ""))
 
 
-func treat_current_patient_with_combination(combination: Dictionary) -> void:
+func treat_current_patient_with_combination(combination: Dictionary) -> bool:
 	if game_finished:
-		return
+		return false
 
 	if not patient_manager.has_current_patient():
-		return
+		return false
 
-	if not _is_valid_herb_combination(combination):
-		add_diary_entry("Tentei preparar uma mistura, mas errei a proporção. Preciso usar exatamente três porções de ervas.")
-		return
+	if not resource_manager.is_valid_herb_combination(combination, REQUIRED_HERB_TOTAL):
+		var invalid_message := "Tentei preparar uma mistura, mas errei a proporção. Preciso usar exatamente três porções de ervas."
+		current_day_actions.append(invalid_message)
+		add_diary_entry(invalid_message)
+		return false
+
+	if not resource_manager.has_herb_combination(combination):
+		var insufficient_message := "Tentei preparar uma mistura, mas minhas ervas não foram suficientes."
+		current_day_actions.append(insufficient_message)
+		add_diary_entry(insufficient_message)
+		return false
 
 	if not resource_manager.consume_herb_combination(combination):
-		var message := "Tentei preparar uma mistura, mas minhas ervas não foram suficientes."
-		current_day_actions.append(message)
-		add_diary_entry(message)
-		return
+		var consume_error_message := "Tentei preparar a mistura, mas algo deu errado ao separar as ervas."
+		current_day_actions.append(consume_error_message)
+		add_diary_entry(consume_error_message)
+		return false
 
 	var patient := patient_manager.current_patient
 	var effect_data := disease_manager.get_effect_for_combination(patient.disease_name, combination)
@@ -174,7 +182,7 @@ func treat_current_patient_with_combination(combination: Dictionary) -> void:
 		"Preparei %s para %s usando %s." % [
 			mixture_name,
 			patient.patient_name,
-			_describe_combination(combination),
+			resource_manager.describe_herb_combination(combination),
 		]
 	)
 
@@ -183,6 +191,8 @@ func treat_current_patient_with_combination(combination: Dictionary) -> void:
 
 	if not game_finished:
 		advance_time(3)
+
+	return true
 
 
 func refuse_current_patient() -> void:
@@ -335,15 +345,6 @@ func _load_patients_for_current_day() -> void:
 	patient_manager.load_patients_from_json(time_manager.current_day, PATIENTS_JSON_PATH)
 
 
-func _is_valid_herb_combination(combination: Dictionary) -> bool:
-	var total := 0
-
-	for herb_name in combination.keys():
-		total += int(combination[herb_name])
-
-	return total == REQUIRED_HERB_TOTAL
-
-
 func _on_patient_changed(patient: Patient) -> void:
 	patient_changed.emit(patient)
 
@@ -394,27 +395,9 @@ func _on_game_days_finished() -> void:
 
 
 func _register_patient_result(patient: Patient, result: Patient.HealthState) -> void:
-	match result:
-		Patient.HealthState.RECOVERED:
-			current_day_patient_results.append("%s se recuperou após a mistura." % patient.patient_name)
-
-		Patient.HealthState.STABILIZED:
-			current_day_patient_results.append("%s ficou estável. A doença não cedeu por completo, mas consegui afastá-la da beira do abismo." % patient.patient_name)
-
-		Patient.HealthState.STABLE:
-			current_day_patient_results.append("%s permaneceu estável." % patient.patient_name)
-
-		Patient.HealthState.WEAK:
-			current_day_patient_results.append("%s ficou debilitado. A mistura não parece ter sido suficiente." % patient.patient_name)
-
-		Patient.HealthState.WORSENED:
-			current_day_patient_results.append("%s piorou depois do tratamento. Talvez eu tenha confundido os sinais da doença." % patient.patient_name)
-
-		Patient.HealthState.CRITICAL:
-			current_day_patient_results.append("%s terminou em estado crítico." % patient.patient_name)
-
-		Patient.HealthState.DEAD:
-			current_day_patient_results.append("%s morreu sob meus cuidados." % patient.patient_name)
+	current_day_patient_results.append(
+		GameNarrativeService.build_patient_treatment_result_text(patient, result)
+	)
 
 
 func _register_waiting_patients_at_day_end() -> void:
@@ -426,28 +409,11 @@ func _register_waiting_patients_at_day_end() -> void:
 
 
 func _write_day_summary(day_finished: int) -> void:
-	var text := "Diário - %s\n\n" % get_day_name(day_finished)
-	text += "Hoje foi mais um dia pesado durante a peste.\n\n"
-
-	if current_day_actions.is_empty():
-		text += "Quase nada pude fazer. O silêncio da casa pesou mais do que os gritos da vila.\n\n"
-	else:
-		text += "Minhas ações:\n"
-
-		for action in current_day_actions:
-			text += "- %s\n" % action
-
-		text += "\n"
-
-	if current_day_patient_results.is_empty():
-		text += "Nenhum paciente ficou sob meus cuidados hoje.\n"
-	else:
-		text += "Sobre os pacientes:\n"
-
-		for result in current_day_patient_results:
-			text += "- %s\n" % result
-
-	text += "\nTermino o dia cansado, com as mãos manchadas pelo cheiro das ervas e pela dúvida do que fiz."
+	var text := GameNarrativeService.build_day_summary(
+		get_day_name(day_finished),
+		current_day_actions,
+		current_day_patient_results
+	)
 
 	diary_summaries_by_day[day_finished] = text
 	add_diary_entry(text)
@@ -512,22 +478,3 @@ func _write_game_over_summary() -> void:
 	)
 
 	add_diary_entry(text)
-
-
-func _describe_combination(combination: Dictionary) -> String:
-	var parts: Array[String] = []
-
-	var artemisia_amount := int(combination.get(ResourceManager.ARTEMISIA, 0))
-	var valeriana_amount := int(combination.get(ResourceManager.VALERIANA, 0))
-	var salvia_amount := int(combination.get(ResourceManager.SALVIA, 0))
-
-	if artemisia_amount > 0:
-		parts.append("%d Artemísia-cinzenta" % artemisia_amount)
-
-	if valeriana_amount > 0:
-		parts.append("%d Raiz-de-valeriana" % valeriana_amount)
-
-	if salvia_amount > 0:
-		parts.append("%d Sálvia-da-febre" % salvia_amount)
-
-	return ", ".join(parts)

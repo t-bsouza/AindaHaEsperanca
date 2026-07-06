@@ -123,3 +123,48 @@ func _emit_all_changed() -> void:
 		resource_changed.emit(resource_name, get_resource(resource_name))
 
 	resources_changed.emit(get_snapshot())
+
+
+func is_valid_herb_combination(combination: Dictionary, required_total: int = 3) -> bool:
+	var allowed_herbs := [
+		ARTEMISIA,
+		VALERIANA,
+		SALVIA,
+	]
+
+	var total := 0
+
+	for herb_name in combination.keys():
+		if not allowed_herbs.has(herb_name):
+			return false
+
+		var amount := int(combination[herb_name])
+
+		if amount < 0:
+			return false
+
+		total += amount
+
+	return total == required_total
+
+
+func describe_herb_combination(combination: Dictionary) -> String:
+	var parts: Array[String] = []
+
+	var artemisia_amount := int(combination.get(ARTEMISIA, 0))
+	var valeriana_amount := int(combination.get(VALERIANA, 0))
+	var salvia_amount := int(combination.get(SALVIA, 0))
+
+	if artemisia_amount > 0:
+		parts.append("%d Artemísia-cinzenta" % artemisia_amount)
+
+	if valeriana_amount > 0:
+		parts.append("%d Raiz-de-valeriana" % valeriana_amount)
+
+	if salvia_amount > 0:
+		parts.append("%d Sálvia-da-febre" % salvia_amount)
+
+	if parts.is_empty():
+		return "nenhuma erva"
+
+	return ", ".join(parts)

@@ -125,3 +125,61 @@ static func _build_partial_ending_text(
 		text += "Mais vidas se perderam do que foram salvas. Ainda houve sobreviventes, mas a vitória tem gosto amargo."
 
 	return text
+
+
+static func build_patient_treatment_result_text(patient: Patient, result: Patient.HealthState) -> String:
+	match result:
+		Patient.HealthState.RECOVERED:
+			return "%s se recuperou após a mistura." % patient.patient_name
+
+		Patient.HealthState.STABILIZED:
+			return "%s ficou estável. A doença não cedeu por completo, mas consegui afastá-la da beira do abismo." % patient.patient_name
+
+		Patient.HealthState.STABLE:
+			return "%s permaneceu estável." % patient.patient_name
+
+		Patient.HealthState.WEAK:
+			return "%s ficou debilitado. A mistura não parece ter sido suficiente." % patient.patient_name
+
+		Patient.HealthState.WORSENED:
+			return "%s piorou depois do tratamento. Talvez eu tenha confundido os sinais da doença." % patient.patient_name
+
+		Patient.HealthState.CRITICAL:
+			return "%s terminou em estado crítico." % patient.patient_name
+
+		Patient.HealthState.DEAD:
+			return "%s morreu sob meus cuidados." % patient.patient_name
+
+		_:
+			return "%s teve um resultado incerto após o tratamento." % patient.patient_name
+
+
+static func build_day_summary(
+	day_name: String,
+	current_day_actions: Array[String],
+	current_day_patient_results: Array[String]
+) -> String:
+	var text := "Diário - %s\n\n" % day_name
+	text += "Hoje foi mais um dia pesado durante a peste.\n\n"
+
+	if current_day_actions.is_empty():
+		text += "Quase nada pude fazer. O silêncio da casa pesou mais do que os gritos da vila.\n\n"
+	else:
+		text += "Minhas ações:\n"
+
+		for action in current_day_actions:
+			text += "- %s\n" % action
+
+		text += "\n"
+
+	if current_day_patient_results.is_empty():
+		text += "Nenhum paciente ficou sob meus cuidados hoje.\n"
+	else:
+		text += "Sobre os pacientes:\n"
+
+		for result in current_day_patient_results:
+			text += "- %s\n" % result
+
+	text += "\nTermino o dia cansado, com as mãos manchadas pelo cheiro das ervas e pela dúvida do que fiz."
+
+	return text
