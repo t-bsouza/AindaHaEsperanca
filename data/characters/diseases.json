@@ -1,0 +1,159 @@
+{
+  "diseases": {
+    "cansaco_cronico": {
+      "display_name": "Cansaço Crônico",
+      "known_to_player": true,
+      "description": "Esgotamento profundo sem causa aparente.",
+      "symptoms": ["Olheiras", "Palidez", "Desatenção", "Dor de cabeça"],
+      "recipes": {
+        "A|A|A": { "display_name": "infusão pura de artemísia", "outcome": "good" }
+      }
+    },
+    "tisico": {
+      "display_name": "Tísico",
+      "known_to_player": true,
+      "description": "Enfermidade pulmonar que consome o paciente lentamente.",
+      "symptoms": ["Tosse com sangue", "Febre noturna", "Emagrecimento acelerado"],
+      "recipes": {
+        "A|A|A": { "display_name": "infusão pura de artemísia", "outcome": "good" }
+      }
+    },
+    "mal_do_ar": {
+      "display_name": "Mal do Ar",
+      "known_to_player": true,
+      "description": "Causado por miasmas, provoca paralisia temporária.",
+      "symptoms": ["Paralisia"],
+      "recipes": {
+        "A|A|A": { "display_name": "infusão pura de artemísia", "outcome": "good" }
+      }
+    },
+    "mareio": {
+      "display_name": "Mareio",
+      "known_to_player": true,
+      "description": "Desequilíbrio severo causado por exposição ao mar ou altitude.",
+      "symptoms": ["Desequilíbrio", "Vômito", "Suor frio", "Palidez"],
+      "recipes": {
+        "A|A|V": { "display_name": "tônico de artemísia e valeriana", "outcome": "good" }
+      }
+    },
+    "encatarrado": {
+      "display_name": "Encatarrado",
+      "known_to_player": true,
+      "description": "Inflamação das vias respiratórias com tosse persistente.",
+      "symptoms": ["Dificuldade para respirar", "Tosse", "Dor de cabeça"],
+      "recipes": {
+        "A|A|S": { "display_name": "tônico de artemísia e sálvia", "outcome": "good" }
+      }
+    },
+    "peito_fraco": {
+      "display_name": "Peito Fraco",
+      "known_to_player": true,
+      "description": "Fraqueza cardíaca com dores no peito e cansaço intenso.",
+      "symptoms": ["Dor de cabeça", "Canseira", "Fraqueza"],
+      "recipes": {
+        "A|S|A": { "display_name": "preparado de artemísia e sálvia alternados", "outcome": "good" }
+      }
+    },
+    "mal_de_encosto": {
+      "display_name": "Mal de Encosto",
+      "known_to_player": true,
+      "description": "Fraqueza e dores sem origem física identificável.",
+      "symptoms": ["Canseira", "Dor", "Fraqueza", "Vômito"],
+      "recipes": {
+        "A|S|A": { "display_name": "preparado de artemísia e sálvia alternados", "outcome": "good" }
+      }
+    },
+    "falta_de_voz": {
+      "display_name": "Falta de Voz",
+      "known_to_player": true,
+      "description": "Inflamação da garganta com perda da voz.",
+      "symptoms": ["Boca seca", "Garganta áspera", "Falta de ar"],
+      "recipes": {
+        "A|V|V": { "display_name": "infusão de artemísia e valeriana dupla", "outcome": "good" }
+      }
+    },
+    "olho_de_vela": {
+      "display_name": "Olho de Vela",
+      "known_to_player": true,
+      "description": "Inflamação ocular que causa visão turva e espasmos.",
+      "symptoms": ["Visão turva", "Olho tremendo", "Dor de cabeça"],
+      "recipes": {
+        "A|V|S": { "display_name": "colírio de artemísia, valeriana e sálvia", "outcome": "good" }
+      }
+    },
+    "friagem": {
+      "display_name": "Friagem",
+      "known_to_player": true,
+      "description": "Resfriamento intenso do corpo após exposição ao frio.",
+      "symptoms": ["Tremedeira", "Palidez", "Boca seca", "Espirros"],
+      "recipes": {
+        "A|S|V": { "display_name": "aquecedor de artemísia, sálvia e valeriana", "outcome": "good" }
+      }
+    },
+    "toque_de_folha": {
+      "display_name": "Toque de Folha",
+      "known_to_player": true,
+      "description": "Reação alérgica severa causada por plantas tóxicas.",
+      "symptoms": ["Vermelhidão", "Coceira", "Suor frio", "Vômito"],
+      "recipes": {
+        "A|S|S": { "display_name": "antídoto de artemísia e sálvia dupla", "outcome": "good" }
+      }
+    },
+    "folia": {
+      "display_name": "Folia",
+      "known_to_player": true,
+      "description": "Excitação nervosa excessiva que impede o descanso.",
+      "symptoms": ["Dificuldade para dormir", "Desatenção", "Falta de Ar"],
+      "recipes": {
+        "A|S|V": { "display_name": "calmante de artemísia, sálvia e valeriana", "outcome": "good" }
+      }
+    },
+    "tosse_negra": {
+      "display_name": "Tosse Negra",
+      "known_to_player": false,
+      "description": "Doença respiratória grave associada à praga. O receituário não tem cura documentada.",
+      "symptoms": ["Tosse escura", "Febre noturna intensa", "Fraqueza extrema", "Sangue na tosse"],
+      "recipes": {
+        "A|S|S": { "display_name": "tentativa com artemísia e sálvia", "outcome": "neutral" }
+      }
+    },
+    "febre_putrida": {
+      "display_name": "Febre Pútrida",
+      "known_to_player": false,
+      "description": "Febre agressiva associada à praga. O receituário não tem cura documentada.",
+      "symptoms": ["Febre alta persistente", "Dor no peito", "Vômito escuro", "Fraqueza"],
+      "recipes": {
+        "A|A|V": { "display_name": "tentativa com artemísia e valeriana", "outcome": "neutral" }
+      }
+    },
+    "delirio_febril": {
+      "display_name": "Delírio Febril",
+      "known_to_player": false,
+      "description": "Febre com delírio associada à praga. O receituário não tem cura documentada.",
+      "symptoms": ["Calafrios", "Manchas roxas", "Delírio", "Febre alta"],
+      "recipes": {
+        "V|A|S": { "display_name": "tentativa com valeriana e sálvia", "outcome": "neutral" }
+      }
+    },
+    "praga": {
+      "display_name": "A Praga",
+      "known_to_player": false,
+      "description": "Doença misteriosa que intensifica todos os outros males e bloqueia tratamentos conhecidos.",
+      "symptoms": ["Manchas escuras no pescoço", "Febre inexplicável", "Progressão acelerada da doença"],
+      "recipes": {
+        "A|V|S": { "display_name": "mistura estabilizadora (Dia 4)", "outcome": "postpone" },
+        "V|S|A": { "display_name": "o remédio verdadeiro", "outcome": "cure_plague" }
+      }
+    },
+    "praga_mutada": {
+      "display_name": "A Praga (Mutada)",
+      "known_to_player": false,
+      "description": "A praga mudou. Os tratamentos anteriores não funcionam mais — e agora podem matar.",
+      "symptoms": ["Manchas escuras espalhadas", "Febre alta", "Hemorragia", "Colapso súbito"],
+      "recipes": {
+        "A|V|S": { "display_name": "mistura que costumava funcionar", "outcome": "bad" },
+        "V|S|A": { "display_name": "o remédio verdadeiro", "outcome": "cure_plague" }
+      }
+    }
+  }
+}

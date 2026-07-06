@@ -1,0 +1,105 @@
+{
+  "characters": {
+    "nara": {
+      "name": "Nara Machado",
+      "age": 34,
+      "occupation": "Costureira",
+      "sprite": "res://data/assets/personagens/naraMachado.png",
+      "resource_multiplier": 2,
+      "has_plague": false,
+      "disease_name": "cansaco_cronico",
+      "severity": 35,
+      "is_story_only": false,
+      "introduction_dialogue": "Doutor... minha familiar está acamada faz dias. Eu mesma já sinto a falta de forças — olheiras que não saem, dor de cabeça constante. Custará mais atender fora daqui, mas preciso que o senhor tente.",
+      "examination_dialogue": "Ela e eu sentimos o mesmo: palidez, desatenção — fico no meio da costura e esqueço o que estava fazendo. Uma fraqueza sem causa que não vai embora, e dor de cabeça surda dia e noite.",
+      "cured_dialogue": "Me sinto mais leve já. Obrigada, Doutor. Vou carregar o dobro do remédio pra minha familiar também.",
+      "death_dialogue": "Era tarde demais. Eu devia ter vindo antes.",
+      "day_dialogues": {
+        "2": {
+          "introduction_dialogue": "Voltei, Doutor. O remédio de ontem deu alívio, mas a fraqueza voltou durante a noite. Minha familiar também não melhorou de todo.",
+          "examination_dialogue": "As olheiras continuam, a desatenção também. Ela estava com palidez muito forte quando saí de casa esta manhã. É o mesmo cansaço sem causa — como se dormisse a noite inteira sem descansar."
+        }
+      }
+    },
+    "tomas": {
+      "name": "Tomás",
+      "age": 41,
+      "occupation": "Pescador",
+      "sprite": "res://data/assets/personagens/tomas.png",
+      "resource_multiplier": 1,
+      "has_plague": true,
+      "auto_heals_after_cure": true,
+      "disease_name": "tosse_negra",
+      "severity": 65,
+      "is_story_only": false,
+      "introduction_dialogue": "É só cansaço de uma pescaria pesada, Doutor. Mas a mulher não me deixou em paz até eu vir. Apareceram umas manchas escuras no pescoço essa semana... ela ficou com medo.",
+      "examination_dialogue": "Essa tosse tá escurecendo — não é normal, eu sei. Sangue às vezes. Febre durante a noite, fraqueza que não é de pesca. E as manchas no pescoço que não somem... Tenho pescado aqui o mês inteiro.",
+      "cured_dialogue": "Me sinto melhor, Doutor. Mas essas manchas no pescoço... foram embora também?",
+      "death_dialogue": "Não era só cansaço, não era..."
+    },
+    "antonio": {
+      "name": "Seu Antônio Ferreira",
+      "age": 71,
+      "occupation": "Pescador aposentado",
+      "sprite": "res://data/assets/personagens/AntonioFerreira.png",
+      "resource_multiplier": 1,
+      "has_plague": true,
+      "auto_heals_after_cure": true,
+      "disease_name": "delirio_febril",
+      "severity": 55,
+      "is_story_only": false,
+      "introduction_dialogue": "Doutor, não estou bem faz dois dias. Comemos o mesmo peixe na semana passada, eu, Seu Tomás e Dona Perpétua. Ouvi dizer que ele também veio aqui... e que não estava bem.",
+      "examination_dialogue": "Calafrios à noite, febre que vem e vai... e às vezes fico confuso, vejo vultos onde não tem nada. Manchas roxas no braço. E no pescoço, umas manchas escuras — iguais às que vi no Tomás quando passei na casa dele.",
+      "cured_dialogue": "Posso voltar pra minha rede. Obrigado, Doutor. Mas cuide de quem mais comeu aquele peixe...",
+      "death_dialogue": "Levei uma vida longa... foi uma boa vida."
+    },
+    "clara": {
+      "name": "Clara Mendes",
+      "age": 22,
+      "occupation": "Aprendiz de escriba",
+      "sprite": "res://data/assets/personagens/claraMendes.png",
+      "resource_multiplier": 1,
+      "has_plague": true,
+      "disease_name": "febre_putrida",
+      "severity": 45,
+      "is_story_only": false,
+      "auto_heals_after_cure": true,
+      "introduction_dialogue": "Doutor, cresci nas bordas da Floresta da Sálvia e passei anos estudando as plantas medicinais. Se o senhor me ajudar com essa febre, tenho algo que pode ser essencial — anotei nos meus estudos sobre a praga.",
+      "examination_dialogue": "Febre alta há dois dias, dor no peito, fraqueza profunda. Vomitei escuro essa manhã. Reconheço esses sintomas — mas o que me preocupa são as manchas escuras no pescoço. É a praga. Meus estudos indicam que ela bloqueia qualquer remédio comum. Precisa ser tratada primeiro.",
+      "cured_dialogue": "Obrigada! Agora posso continuar minha pesquisa. Anote: Valeriana primeiro, depois Sálvia, depois Artemísia. Essa é a ordem exata que destrói a praga de verdade.",
+      "death_dialogue": "Nunca terminei minha pesquisa sobre a floresta..."
+    },
+    "perpetua": {
+      "name": "Dona Perpétua",
+      "age": 58,
+      "occupation": "Padeira",
+      "sprite": "res://data/assets/personagens/donaPerpetua.png",
+      "resource_multiplier": 1,
+      "has_plague": true,
+      "auto_heals_after_cure": true,
+      "disease_name": "febre_putrida",
+      "severity": 65,
+      "is_story_only": false,
+      "introduction_dialogue": "Doutor, não consigo trabalhar faz dois dias. É a mesma coisa que pegou Seu Antônio — comemos o mesmo peixe. E essas manchas escuras no pescoço, igualzinhas às dele.",
+      "examination_dialogue": "Febre que não cede, vômito escuro, fraqueza que não me deixa ficar de pé. As manchas no pescoço estão crescendo. Ouvi que Seu Antônio teve isso... e Tomás antes dele. Somos todos do mesmo jantar.",
+      "cured_dialogue": "Amanhã já faço pão de novo. Obrigada, Doutor. Aquele peixe era maldito.",
+      "death_dialogue": "O pão do dia de hoje ficou no forno..."
+    },
+    "padre_alves": {
+      "name": "Padre Alves",
+      "age": 64,
+      "occupation": "Padre",
+      "sprite": "res://data/assets/personagens/padreAlves.png",
+      "resource_multiplier": 1,
+      "has_plague": true,
+      "auto_heals_after_cure": true,
+      "disease_name": "tosse_negra",
+      "severity": 75,
+      "is_story_only": false,
+      "introduction_dialogue": "Filho... ouvi confissões essa semana inteira. Tomás, Antônio, Perpétua — todos com a mesma doença. Eu mesmo já carrego a tosse há dois dias. E as manchas. A vila toda está adoecendo.",
+      "examination_dialogue": "Tosse com sangue desde ontem à noite. Febre intensa, fraqueza extrema — mal consigo celebrar missa. As manchas no pescoço estão escuras e se espalhando. Mas não é por mim que rezo, filho. É pelos que ainda dependem de mim.",
+      "cured_dialogue": "Deus abençoe suas mãos, filho. Voltarei à minha missa.",
+      "death_dialogue": "Cuide dos que ficam, filho..."
+    }
+  }
+}

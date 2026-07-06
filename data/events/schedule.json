@@ -1,0 +1,180 @@
+{
+  "schedule": {
+    "1": [
+      {
+        "hour": 7,
+        "type": "narrative",
+        "id": "dia1_tutorial_coleta",
+        "character_sprite": "",
+        "pages": [
+          "Você acorda cedo. O consultório está silencioso — por enquanto.",
+          "Suas reservas de ervas estão baixas. Antes que os pacientes cheguem, você precisa coletar nos arredores da vila.",
+          "Use o botão 'Coletar ervas (3h)' para escolher um local: o Porto traz Artemísia e Sálvia, a Floresta traz Valeriana e Sálvia, o Campo traz Sálvia e Artemísia. Cada saída leva 3 horas."
+        ],
+        "diary_note": ""
+      },
+      {
+        "hour": 13,
+        "type": "narrative",
+        "id": "dia1_tutorial_mistura",
+        "character_sprite": "",
+        "pages": [
+          "Sua primeira paciente está a caminho. É hora de aprender a preparar uma mistura.",
+          "Primeiro, examine o paciente para conhecer os sintomas. Depois, consulte o Receituário no diário — ele lista as doenças conhecidas e suas misturas.",
+          "Adicione as três ervas NA ORDEM CORRETA usando os botões. A ordem importa: [Artemísia → Valeriana → Sálvia] é diferente de [Valeriana → Artemísia → Sálvia].",
+          "Quando a mistura estiver completa (3/3), clique em 'Aplicar mistura'. Uma mistura errada pode piorar o paciente!"
+        ],
+        "diary_note": ""
+      },
+      {
+        "hour": 13,
+        "type": "patient",
+        "id": "dia1_nara",
+        "character_id": "nara",
+        "expires_in": 3
+      },
+      {
+        "hour": 16,
+        "type": "narrative",
+        "id": "dia1_garoto",
+        "character_sprite": "res://data/assets/personagens/meninoDesconhecido.png",
+        "pages": [
+          "Um garoto estranho entra pela porta. Ele não fala — apenas olha para você com expressão de terror.",
+          "Ele aponta para o horizonte diversas vezes, fazendo gestos urgentes que você não entende.",
+          "Então pega seu caderno e escreve, com mão tremula: 'A praga vem. Eu vi. Cinza primeiro, branca depois, amarga por último.'",
+          "Antes que você possa perguntar mais, ele desaparece pela porta."
+        ],
+        "diary_note": "Um garoto mudo me visitou hoje. Ele pareceu desesperado tentando avisar sobre algo. Escreveu: 'A praga vem. Cinza primeiro, branca depois, amarga por último.' O que serão essas cores? As ervas?"
+      }
+    ],
+    "2": [
+      {
+        "hour": 14,
+        "type": "patient",
+        "id": "dia2_nara",
+        "character_id": "nara",
+        "expires_in": 2
+      },
+      {
+        "hour": 16,
+        "type": "narrative",
+        "id": "dia2_garoto",
+        "character_sprite": "res://data/assets/personagens/meninoDesconhecido.png",
+        "pages": [
+          "O garoto de ontem volta, visivelmente mais desesperado que da última vez.",
+          "Ele gesticula freneticamente na direção da aldeia, depois aponta para dentro da sala.",
+          "Abre o caderno e escreve rápido: 'Ele já chegou. Olhe para o pescador.'",
+          "Antes de sair, ele acrescenta mais uma linha com letra trêmula: 'Quando a morte já tomou conta: branca primeiro, amarga depois, cinza por último. É a única saída real.'"
+        ],
+        "diary_note": "O garoto voltou. Disse: 'Ele já chegou — olhe para o pescador.' E acrescentou: 'Para curar de verdade: branca primeiro, amarga depois, cinza por último.' Branca=Valeriana, Amarga=Sálvia, Cinza=Artemísia → V→S→A?"
+      },
+      {
+        "hour": 19,
+        "type": "patient",
+        "id": "dia2_tomas",
+        "character_id": "tomas",
+        "expires_in": 2,
+        "dies_if_untreated": true
+      }
+    ],
+    "3": [
+      {
+        "hour": 8,
+        "type": "narrative",
+        "id": "dia3_reflexao",
+        "character_sprite": "",
+        "pages": [
+          "A noite foi longa. Você passou horas relendo suas anotações.",
+          "Há uma doença que o seu receituário não conhece. Ela age diferente — bloqueia os tratamentos que você sabe fazer.",
+          "Você anota: preciso descobrir como tratar a praga antes de poder curar as doenças que ela traz."
+        ],
+        "diary_note": "Anotação: a praga bloqueia os tratamentos comuns. Preciso curar a praga primeiro — só depois as doenças subjacentes respondem ao receituário."
+      },
+      {
+        "hour": 11,
+        "type": "patient",
+        "id": "dia3_antonio",
+        "character_id": "antonio",
+        "expires_in": 3
+      }
+    ],
+    "4": [
+      {
+        "hour": 8,
+        "type": "narrative",
+        "id": "dia4_garoto",
+        "character_sprite": "res://data/assets/personagens/meninoDesconhecido.png",
+        "pages": [
+          "O garoto mudo aparece ainda de manhã cedo, antes que qualquer paciente chegue.",
+          "Ele abre um caderno em uma página já escrita e empurra em sua direção.",
+          "A página diz: 'Para segurar a morte: cinza, branca, amarga — nessa ordem. Não cura, só adia. Para curar de verdade, procure quem conhece a floresta.'",
+          "Você copia a informação com cuidado. Cinza, branca, amarga... Artemísia, Valeriana, Sálvia?"
+        ],
+        "diary_note": "Mistura estabilizadora descoberta: Artemísia → Valeriana → Sálvia (cinza, branca, amarga). Não cura a praga, mas adia a morte. A cura verdadeira: procurar quem conhece a floresta."
+      },
+      {
+        "hour": 13,
+        "type": "patient",
+        "id": "dia4_clara",
+        "character_id": "clara",
+        "expires_in": 3
+      }
+    ],
+    "5": [
+      {
+        "hour": 8,
+        "type": "narrative",
+        "id": "dia5_praga_geral",
+        "character_sprite": "",
+        "pages": [
+          "A praga se espalhou pela vila inteira durante a noite.",
+          "Quase todos contraíram a doença. Você ainda está de pé — sua experiência com ervas parece ter dado alguma proteção.",
+          "O tempo está se esgotando. Você precisará escolher quem salvar."
+        ],
+        "diary_note": "A praga chegou a todos. Preciso agir rápido."
+      },
+      {
+        "hour": 10,
+        "type": "patient",
+        "id": "dia5_perpetua",
+        "character_id": "perpetua",
+        "expires_in": 3
+      }
+    ],
+    "6": [
+      {
+        "hour": 8,
+        "type": "narrative",
+        "id": "dia6_mutacao",
+        "character_sprite": "",
+        "pages": [
+          "Algo mudou durante a noite. A praga está diferente.",
+          "Você testa a mistura estabilizadora no primeiro paciente que aparece — e o estado dele piora!",
+          "A mistura que segurava a morte agora faz o oposto. Você precisará da cura verdadeira — a que Clara mencionou, se ela sobreviveu."
+        ],
+        "diary_note": "ATENÇÃO: A praga mutou. Artemísia → Valeriana → Sálvia agora piora o paciente. Usar apenas a cura verdadeira: Valeriana → Sálvia → Artemísia."
+      },
+      {
+        "hour": 11,
+        "type": "patient",
+        "id": "dia6_padre",
+        "character_id": "padre_alves",
+        "expires_in": 3
+      }
+    ],
+    "7": [
+      {
+        "hour": 8,
+        "type": "narrative",
+        "id": "dia7_final",
+        "character_sprite": "",
+        "pages": [
+          "Último dia. Você olha para suas ervas — o estoque é limitado.",
+          "Nem todos podem ser salvos. Você precisará escolher com sabedoria quem receberá os tratamentos que restam.",
+          "A cura verdadeira para a praga é: Valeriana → Sálvia → Artemísia."
+        ],
+        "diary_note": ""
+      }
+    ]
+  }
+}
