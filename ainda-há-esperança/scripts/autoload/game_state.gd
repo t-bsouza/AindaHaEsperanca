@@ -17,6 +17,7 @@ const FAMILY_JSON_PATH := "res://data/characters/family.json"
 const DISEASES_JSON_PATH := "res://data/characters/diseases.json"
 
 const REQUIRED_HERB_TOTAL := 3
+const VICTORY_SCORE_THRESHOLD := 50
 
 var patient_manager: PatientManager
 var resource_manager: ResourceManager
@@ -125,14 +126,22 @@ func get_salvia() -> int:
 func get_diary_title() -> String:
 	if game_finished:
 		if patient_manager.get_survived_count() <= 0:
-			return "Game Over"
+			return "Derrota"
 
 		if patient_manager.get_dead_count() <= 0:
 			return "Vitória"
 
-		return "Fim da Semana"
+		if _get_final_score() >= VICTORY_SCORE_THRESHOLD:
+			return "Vitória"
+
+		return "Derrota"
 
 	return "Diário"
+
+
+func _get_final_score() -> int:
+	var stats := patient_manager.get_final_statistics()
+	return _calculate_final_score(int(stats["survived"]), int(stats["dead"]), int(stats["total"]))
 
 
 func get_diary_entries_newest_first() -> Array[String]:
@@ -429,9 +438,9 @@ func _write_final_week_summary() -> void:
 	var survived_count := int(stats["survived"])
 	var dead_count := int(stats["dead"])
 	var total_count := int(stats["total"])
-
 	var dead_patient_names := patient_manager.get_dead_patient_names()
 	var survived_patient_names := patient_manager.get_survived_patient_names()
+	var score := _calculate_final_score(survived_count, dead_count, total_count)
 
 	var text := GameNarrativeService.build_final_week_summary(
 		survived_count,
@@ -441,7 +450,24 @@ func _write_final_week_summary() -> void:
 		survived_patient_names
 	)
 
+	text += "\n\nPontuação final: %d/100\n\n" % score
+
+	if score >= VICTORY_SCORE_THRESHOLD:
+		text += "VITÓRIA: a vila resistiu mais uma semana graças aos seus cuidados."
+	else:
+		text += "DERROTA: a peste cobrou um preço alto demais nesta semana."
+
 	add_diary_entry(text)
+
+
+func _calculate_final_score(survived_count: int, dead_count: int, total_count: int) -> int:
+	if total_count <= 0:
+		return 0
+
+	var survival_score := int(round((float(survived_count) / float(total_count)) * 100.0))
+	var death_penalty := dead_count * 5
+
+	return clamp(survival_score - death_penalty, 0, 100)
 
 
 func _check_early_game_over() -> void:
@@ -476,5 +502,8 @@ func _write_game_over_summary() -> void:
 		total_count,
 		dead_patient_names
 	)
+
+	text += "\n\nPontuação final: 0/100\n\n"
+	text += "DERROTA: a peste venceu antes do fim da semana."
 
 	add_diary_entry(text)
